@@ -1,0 +1,23 @@
+﻿@model Domain.ViewModels.Account.LoginViewModel
+@{
+
+}
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post))
+{
+    <div class="mb-3">
+        <label class="form-label">Login:</label>
+        <div>
+            <input type="text" class="form-control" asp-for="Login">
+            <span class="text-danger" asp-validation-for="Login" data-valmsg-replace="true"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Password:</label>
+        <div>
+            <input type="password" asp-for="Password" class="form-control">
+            <span class="text-danger" asp-validation-for="Password" data-valmsg-replace="true"></span>
+        </div>
+    </div>
+    <button>Submit</button>
+}
