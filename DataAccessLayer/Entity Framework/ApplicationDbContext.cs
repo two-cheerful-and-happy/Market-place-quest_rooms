@@ -59,6 +59,18 @@ public class ApplicationDbContext : DbContext
                 .Property(x => x.Longitude)
                 .HasColumnType("float")
                 .HasColumnName("Longitude");
+
+            //buildAction.HasData(new Location
+            //{
+            //    Id = 1,
+            //    Name = "s",
+            //    Address = "s",
+            //    Description = "s",
+            //    LocationConfirmed = true,
+            //    Author = new Account { Id = 1 },
+            //    Latitude = 49.473826,
+            //    Longitude = 10.446910
+            //});
         });
 
         modelBuilder.Entity<Account>(buildAction =>

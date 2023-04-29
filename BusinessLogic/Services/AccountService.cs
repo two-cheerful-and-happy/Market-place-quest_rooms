@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Interfaces;
+using Domain.Entities;
 using Domain.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -113,25 +114,11 @@ public class AccountService : IAccountService
     {
         try
         {
-            var account = await (from user in _accountRepository.Select()
-                                 where user.Login == login
-                                 join location in _locationRepository.Select() 
-                                 on user.Id equals location.Author.Id into locationGroup
-                                 from subLocation in locationGroup.DefaultIfEmpty()
-                                 //join locationOfUser in _locationOfUserRepository.Select()
-                                 //on user.Id equals locationOfUser.Id into locationOfUserGroup
-                                 //from subLocationOFUser in locationGroup.DefaultIfEmpty()
-                                 select new Account
-                                 {
-                                     Id = user.Id,
-                                     Login = user.Login,
-                                     Email = user.Email,
-                                     Password = user.Password,
-                                     AccountConfirmed = user.AccountConfirmed,
-                                     Role = user.Role,
-                                     //LocationsCreatedByAccount = locationGroup.ToList(),
-                                     //LocationsOfUser = locationOfUserGroup.ToList()
-                                 }).FirstOrDefaultAsync();
+            var account = await _accountRepository.Select()
+                .Include(x => x.LocationsOfUser)
+                .Include(x => x.CommentsCreatedByAccount)
+                .Include(x => x.LocationsCreatedByAccount)
+                .FirstOrDefaultAsync();
             if (account == null)
                 return new BaseResponse<Account>
                 {

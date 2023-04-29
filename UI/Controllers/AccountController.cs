@@ -96,10 +96,10 @@ public class AccountController : Controller
                 await _mailService.SendEmailAsync(model.Email, "Confirm email", mail);
 
                 return PartialView(
-                    "Success",
+                    "ModalWindow",
                     new PopupWindowViewModel
                     {
-                        Title = "ModalWindow",
+                        Title = "Success",
                         TypeOfPopup = Domain.Enums.TypeOfPopupWindow.Success,
                         Body = $"Check your account: {model.Email} to confirm your email."
                     });

@@ -13,8 +13,8 @@ public static class Initializer
 
     public static void InitializeServices(this IServiceCollection services)
     {
-
         services.AddSingleton<IMailService, MailService>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IMapService, MapService>();
     }
 }
