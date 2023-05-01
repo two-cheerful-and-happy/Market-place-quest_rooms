@@ -1,26 +1,79 @@
-﻿using DataAccessLayer.Interfaces;
-using Domain.Entities;
-using Domain.Helpers;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
-
-namespace BusinessLogic.Services;
+﻿namespace BusinessLogic.Services;
 
 public class AccountService : IAccountService
 {
     private readonly IBaseRepository<Account> _accountRepository;
     private readonly IBaseRepository<Location> _locationRepository;
-    private readonly IBaseRepository<LocationOfUser> _locationOfUserRepository;
+    private readonly IBaseRepository<RequestOnChangingRole> _requestOnChangingRoleRepository;
 
     public AccountService(
         IBaseRepository<Account> accountRepository,
         IBaseRepository<Location> locationRepository,
-        IBaseRepository<LocationOfUser> locationOfUserRepository)
+        IBaseRepository<RequestOnChangingRole> requestOnChangingRoleRepository)
+       
     {
         _accountRepository = accountRepository;
         _locationRepository = locationRepository;
-        _locationOfUserRepository = locationOfUserRepository;
+       _requestOnChangingRoleRepository = requestOnChangingRoleRepository;
+    }
+
+    public async Task<BaseResponse<string>> CreateNewRequestOnChangingRole(CreateRequestToChangingRoleViewModel model)
+    {
+        try
+        {
+            
+            var account = await _accountRepository.Select().Where(x => x.Login == model.Login).FirstOrDefaultAsync();
+
+            // Checking if the role is repeated with the user role.
+            if (model.RequestedRole == account.Role)
+                return new BaseResponse<string>
+                {
+                    Data = "Error",
+                    Description = "You can not choose your own role",
+                    StatusCode = HttpStatusCode.InternalServerError
+                };
+
+            RequestOnChangingRole request = await _requestOnChangingRoleRepository.Select()
+                .Where(x => x.AccountId == account.Id)
+                .FirstOrDefaultAsync();
+
+            // Checking if user has already created requst.
+            if (request is null)
+            {
+                request = new();
+                request.Account = account;
+                request.AccountId = account.Id;
+                request.DescriptionOrReason = model.Description;
+                request.RequestedRole = model.RequestedRole;
+
+                if (await _requestOnChangingRoleRepository.Add(request))
+                    return new BaseResponse<string>
+                    {
+                        StatusCode = HttpStatusCode.OK
+                    };
+
+                return new BaseResponse<string>
+                {
+                    Data = "Error",
+                    Description = "request did not add",
+                    StatusCode = HttpStatusCode.InternalServerError
+                };
+            }
+            return new BaseResponse<string>
+            {
+                Data = "Error",
+                Description = "You have already created request",
+                StatusCode = HttpStatusCode.InternalServerError
+            };
+        }
+        catch (Exception ex)
+        {
+            return new BaseResponse<string>
+            {
+                Description = ex.Message,
+                StatusCode = HttpStatusCode.InternalServerError
+            };
+        }
     }
 
     public async Task<BaseResponse<ClaimsIdentity>> LoginAsync(LoginViewModel model)
@@ -35,6 +88,13 @@ public class AccountService : IAccountService
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
                     Description = "User dose not exist"
+                };
+
+            if(!userExist.AccountConfirmed)
+                return new BaseResponse<ClaimsIdentity>()
+                {
+                    StatusCode = HttpStatusCode.Unauthorized,
+                    Description = "Account dosn't confirmd"
                 };
 
             if (HashPasswordHelper.HashPassowrd(model.Password) == userExist.Password)
@@ -115,7 +175,6 @@ public class AccountService : IAccountService
         try
         {
             var account = await _accountRepository.Select()
-                .Include(x => x.LocationsOfUser)
                 .Include(x => x.CommentsCreatedByAccount)
                 .Include(x => x.LocationsCreatedByAccount)
                 .FirstOrDefaultAsync();
@@ -202,5 +261,17 @@ public class AccountService : IAccountService
             ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
     }
 
-    
+    public async Task<List<Account>> SelectAccountsAsync()
+    {
+        try
+        {
+            var result = await _accountRepository.Select().ToListAsync();
+            return result;
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }    
 }

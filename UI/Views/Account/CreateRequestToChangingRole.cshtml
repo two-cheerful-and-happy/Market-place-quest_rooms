@@ -1,0 +1,33 @@
+﻿@using Domain.Enums
+@model Domain.ViewModels.Account.CreateRequestToChangingRoleViewModel
+@{
+}
+
+
+@if (Model.IsRepeate)
+{
+    
+}
+else
+{
+    @using (Html.BeginForm("SubmitRequestOnChangingRole", "Account", FormMethod.Post))
+    {
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="mb-3">
+        <label class="form-label">Requested role:</label>
+        <div class="col-12">
+            <label class="visually-hidden" for="specificSizeSelect">Preference</label>
+            <select asp-for="@Model.RequestedRole" asp-items="Html.GetEnumSelectList<Role>()" class="form-select">
+                <option value="@Model.RequestedRole">@Model.RequestedRole</option>
+            </select>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description or reasone:</label>
+        <div>
+            <input type="text" class="form-control" asp-for="Description">
+        </div>
+    </div>
+    <button>Submit</button>
+    }   
+}

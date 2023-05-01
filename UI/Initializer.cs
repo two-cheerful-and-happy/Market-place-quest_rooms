@@ -7,8 +7,10 @@ public static class Initializer
     public static void InitializeRepositories(this IServiceCollection services)
     {
         services.AddScoped<IBaseRepository<Location>, LocationRepository>();
-        services.AddScoped<IBaseRepository<LocationOfUser>, LocationOfUserRepository>();
         services.AddScoped<IBaseRepository<Account>, AccountRepository>();
+        services.AddScoped<IBaseRepository<Photo>, PhotoRepository>();
+        services.AddScoped<IBaseRepository<Comment>, CommentRepository>();
+        services.AddScoped<IBaseRepository<RequestOnChangingRole>, RequestOnChangingRoleRepository>();
     }
 
     public static void InitializeServices(this IServiceCollection services)
@@ -16,5 +18,6 @@ public static class Initializer
         services.AddSingleton<IMailService, MailService>();
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IMapService, MapService>();
+        services.AddScoped<IAdminPanelService, AdminPanelService>();
     }
 }

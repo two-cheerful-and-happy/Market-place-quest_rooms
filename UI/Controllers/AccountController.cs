@@ -6,6 +6,7 @@ using Domain.ViewModels.Shared;
 using System.Net;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Azure;
 
 namespace UI.Controllers;
 
@@ -96,17 +97,39 @@ public class AccountController : Controller
                 await _mailService.SendEmailAsync(model.Email, "Confirm email", mail);
 
                 return PartialView(
-                    "ModalWindow",
+                    "SuccessRegistrationPopup",
                     new PopupWindowViewModel
                     {
                         Title = "Success",
-                        TypeOfPopup = Domain.Enums.TypeOfPopupWindow.Success,
                         Body = $"Check your account: {model.Email} to confirm your email."
                     });
             }
             ModelState.AddModelError(response.Data.MemberNames.First(), response.Data.ErrorMessage);
         }
         return View(model);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> CreateRequestToChangingRole()
+    {
+        
+        CreateRequestToChangingRoleViewModel model = new();
+        model.RequestedRole = Domain.Enums.Role.OwnerOfRooms;
+        return PartialView(model);
+    }
+
+    public async Task<IActionResult> SubmitRequestOnChangingRole(CreateRequestToChangingRoleViewModel model)
+    {
+        if(ModelState.IsValid) 
+        {
+            model.Login = User.Identity.Name;
+            var response = await _accountService.CreateNewRequestOnChangingRole(model); 
+            if(response.StatusCode == HttpStatusCode.OK)
+                return View("SuccessPopupWindow");
+            ModelState.AddModelError(response.Data, response.Description);
+        }
+        model.IsRepeate = true;
+        return PartialView(model);
     }
 
     public async Task<IActionResult> Logout()

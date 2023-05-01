@@ -5,10 +5,12 @@ namespace UI.Controllers;
 public class MapController : Controller
 {
     private readonly IMapService _mapService;
+    private readonly IAccountService _accountService;
 
-    public MapController(IMapService mapService)
+    public MapController(IMapService mapService, IAccountService accountService)
     {
         _mapService = mapService;
+        _accountService = accountService;
     }
 
     public IActionResult Index()
@@ -22,6 +24,23 @@ public class MapController : Controller
         var response = await  _mapService.GetLocationsAsync();
 
         return Json(response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Add()
+    {
+        var user = await _accountService.GetAccountByLoginAsync("Goose");
+        var a = new Location()
+        {
+            Address = "s",
+            Author = user.Data,
+            Name = "s",
+            
+            Latitude = 48.837930,
+            Longitude = 27.107993
+        };
+        _mapService.AddNewLocationAsync(a);
+        return View();
     }
 
     public IActionResult GetMyObjects()

@@ -10,6 +10,8 @@ builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddMemoryCache();
+
 builder.Services.InitializeRepositories();
 builder.Services.InitializeServices();
 

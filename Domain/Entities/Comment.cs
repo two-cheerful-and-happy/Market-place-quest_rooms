@@ -8,4 +8,5 @@ public class Comment
     public string Text { get; set; }
     public Mark Mark { get; set; }
     public ICollection<Account> CommentsOfAccount { get; set; }
+    public ICollection<Location> CommentsOfLocation { get; set; }
 }

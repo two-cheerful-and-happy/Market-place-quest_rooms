@@ -1,0 +1,40 @@
+﻿@model Domain.ViewModels.AdminPanel.RequestsOnChangingRoleViewModel
+@{
+}
+@if(Model.RequestOnChangingRoles.Count > 0)
+{
+<div class="table">
+    <table id="myTable" class="table table-bordered table-hover table-sm">
+        <thead>
+            <tr>
+                <th>Login</th>
+                <th>Requested role</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if (Model != null)
+                {
+                    foreach (var Data in Model.RequestOnChangingRoles)
+                    {
+                        <tr>
+                            <td>@Data.Account.Login</td>
+                            <td>@Data.RequestedRole</td>
+                            <td>
+                                <button type="submit" class="btn btn-sm btn-primary" onclick="openModalForm({ url: '@Url.Action("ConfirmChangingRoleWindow", "AdminPanel")', data: @Data.Id })">
+                                    Show
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>    
+}
+else
+{
+    <h1 style="text-align:center">List is empty</h1>
+}

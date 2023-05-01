@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
+using Domain.Helpers;
 
 namespace DataAccessLayer.Entity_Framework;
 
@@ -13,66 +14,12 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Location> LocationTable { get; set; }
     public DbSet<Account> AccountTable { get; set; }
-    public DbSet<LocationOfUser> LocationOfUserTable { get; set; }
+    public DbSet<Photo> PhotoTable { get; set; }
     public DbSet<Comment> CommentTable { get; set; }
+    public DbSet<RequestOnChangingRole> RequestOnChangingRoleTable { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Location>(buildAction =>
-        {
-            buildAction.
-                ToTable("Location_Table");
-
-            buildAction
-                .HasKey(x => x.Id)
-                .HasName("Index_of_location_record");
-
-            buildAction
-                .Property(x => x.Name)
-                .HasColumnType("CHAR(50)")
-                .HasColumnName("Name")
-                .IsRequired();
-
-            buildAction
-                .Property(x => x.Address)
-                .HasColumnType("NVARCHAR(MAX)")
-                .HasColumnName("Address")
-                .IsRequired();
-
-            buildAction
-                .Property(x => x.Description)
-                .HasColumnName("Description")
-                .HasColumnType("VARCHAR(500)")
-                .IsRequired(false);
-
-            buildAction
-                .Property(x => x.LocationConfirmed)
-                .HasColumnName("LocationConfirmed")
-                .HasColumnType("BIT");
-
-            buildAction
-                .Property(x => x.Latitude)
-                .HasColumnType("float")
-                .HasColumnName("Latitude");
-
-            buildAction
-                .Property(x => x.Longitude)
-                .HasColumnType("float")
-                .HasColumnName("Longitude");
-
-            //buildAction.HasData(new Location
-            //{
-            //    Id = 1,
-            //    Name = "s",
-            //    Address = "s",
-            //    Description = "s",
-            //    LocationConfirmed = true,
-            //    Author = new Account { Id = 1 },
-            //    Latitude = 49.473826,
-            //    Longitude = 10.446910
-            //});
-        });
-
         modelBuilder.Entity<Account>(buildAction =>
         {
             buildAction.
@@ -121,12 +68,92 @@ public class ApplicationDbContext : DbContext
                 .WithOne(x => x.Author);
 
             buildAction
-                .HasMany(x => x.LocationsOfUser)
-                .WithMany(x => x.LocationsOfUser);
-
-            buildAction
                 .HasMany(x => x.CommentsCreatedByAccount)
                 .WithMany(x => x.CommentsOfAccount);
+
+            buildAction
+                .HasData(new Account
+                {
+                    Id = 1,
+                    AccountConfirmed= true,
+                    Email = "denyschk@gmail.com",
+                    Login = "Goose",
+                    Password =  HashPasswordHelper.HashPassowrd("12345678"),
+                    Role = Domain.Enums.Role.Admin
+                });
+        });
+
+        modelBuilder.Entity<Location>(buildAction =>
+        {
+            buildAction.
+                ToTable("Location_Table");
+
+            buildAction
+                .HasKey(x => x.Id)
+                .HasName("Index_of_location_record");
+
+            buildAction
+                .Property(x => x.Name)
+                .HasColumnType("CHAR(50)")
+                .HasColumnName("Name")
+                .IsRequired();
+
+            buildAction
+                .Property(x => x.Address)
+                .HasColumnType("NVARCHAR(MAX)")
+                .HasColumnName("Address")
+                .IsRequired();
+
+            buildAction
+                .Property(x => x.Description)
+                .HasColumnName("Description")
+                .HasColumnType("VARCHAR(500)")
+                .IsRequired(false);
+
+            buildAction
+                .Property(x => x.LocationConfirmed)
+                .HasColumnName("LocationConfirmed")
+                .HasColumnType("BIT");
+
+            buildAction
+                .Property(x => x.Latitude)
+                .HasColumnType("float")
+                .HasColumnName("Latitude");
+
+            buildAction
+                .Property(x => x.Longitude)
+                .HasColumnType("float")
+                .HasColumnName("Longitude");
+
+            buildAction
+                .HasMany(x => x.CommentsOfLocation)
+                .WithMany(x => x.CommentsOfLocation);
+        });
+
+        modelBuilder.Entity<RequestOnChangingRole>(buildAction =>
+        {
+            buildAction
+                .ToTable("RequestOnChangingRoleAccount_Table");
+
+            buildAction
+                .HasKey(x => x.Id)
+                .HasName("index_of_request");
+
+            buildAction
+                .Property(x => x.RequestedRole)
+                .HasColumnType("VARCHAR(20)")
+                .HasColumnName("RequestedRole")
+                .IsRequired();
+
+            buildAction
+                .Property(x => x.DescriptionOrReason)
+                .HasColumnType("TEXT")
+                .HasColumnName("DescriptionOrReason")
+                .IsRequired();
+
+            buildAction
+                .HasOne(x => x.Account)
+                .WithOne(x => x.RequestOnChangingRole);
         });
 
         modelBuilder.Entity<Comment>(buildAction =>
@@ -150,44 +177,24 @@ public class ApplicationDbContext : DbContext
                 .HasColumnName("Mark");
         });
 
-        modelBuilder.Entity<LocationOfUser>(buildAction =>
+        modelBuilder.Entity<Photo>(buildAction =>
         {
             buildAction.
-                ToTable("LocationOfUser_Table");
+                ToTable("Photo_Table");
 
             buildAction
                 .HasKey(x => x.Id)
                 .HasName("Index_of_Location_of_user");
 
             buildAction
-                .Property(x => x.Name)
-                .HasColumnType("CHAR(50)")
-                .HasColumnName("Name")
+                .Property(x => x.Value)
+                .HasColumnType("VARBINARY(MAX)")
+                .HasColumnName("Value")
                 .IsRequired();
 
             buildAction
-                .Property(x => x.Address)
-                .HasColumnType("VARCHAR(MAX)")
-                .HasColumnName("Address")
-                .IsRequired();
-
-            buildAction
-                .Property(x => x.Description)
-                .HasColumnType("CHAR(500)")
-                .HasColumnName("Description")
-                .IsRequired(false);
-
-            buildAction
-                .Property(x => x.Latitude)
-                .HasColumnType("FLOAT")
-                .HasColumnName("Latitude")
-                .IsRequired();
-
-            buildAction
-                .Property(x => x.Longitude)
-                .HasColumnType("FLOAT")
-                .HasColumnName("Longitude")
-                .IsRequired();
+                .HasOne(x => x.LocationId)
+                .WithMany(x => x.Photos);
         });
     }
 }
