@@ -18,5 +18,7 @@ public class RegistrationViewModel
     [Compare("Password", ErrorMessage = "Password dosen't compare")]
     public string PasswordConfirm { get; set; }
 
+    public Role Role { get; set; }
+
     public List<ValidationResult> AdditionalErrors { get; set; } = new List<ValidationResult>();
 }

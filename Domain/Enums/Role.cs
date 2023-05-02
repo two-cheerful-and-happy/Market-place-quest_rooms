@@ -13,3 +13,11 @@ public enum Role
     [Display(Name = "Admin")]
     Admin = 3,
 }
+
+public enum RoleForRegistrationPage
+{
+    [Display(Name = "User")]
+    User = 0,
+    [Display(Name = "Owner of rooms")]
+    OwnerOfRooms = 1,
+}

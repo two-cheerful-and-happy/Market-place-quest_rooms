@@ -17,71 +17,14 @@ public class AccountService : IAccountService
        _requestOnChangingRoleRepository = requestOnChangingRoleRepository;
     }
 
-    public async Task<BaseResponse<string>> CreateNewRequestOnChangingRole(CreateRequestToChangingRoleViewModel model)
-    {
-        try
-        {
-            
-            var account = await _accountRepository.Select().Where(x => x.Login == model.Login).FirstOrDefaultAsync();
-
-            // Checking if the role is repeated with the user role.
-            if (model.RequestedRole == account.Role)
-                return new BaseResponse<string>
-                {
-                    Data = "Error",
-                    Description = "You can not choose your own role",
-                    StatusCode = HttpStatusCode.InternalServerError
-                };
-
-            RequestOnChangingRole request = await _requestOnChangingRoleRepository.Select()
-                .Where(x => x.AccountId == account.Id)
-                .FirstOrDefaultAsync();
-
-            // Checking if user has already created requst.
-            if (request is null)
-            {
-                request = new();
-                request.Account = account;
-                request.AccountId = account.Id;
-                request.DescriptionOrReason = model.Description;
-                request.RequestedRole = model.RequestedRole;
-
-                if (await _requestOnChangingRoleRepository.Add(request))
-                    return new BaseResponse<string>
-                    {
-                        StatusCode = HttpStatusCode.OK
-                    };
-
-                return new BaseResponse<string>
-                {
-                    Data = "Error",
-                    Description = "request did not add",
-                    StatusCode = HttpStatusCode.InternalServerError
-                };
-            }
-            return new BaseResponse<string>
-            {
-                Data = "Error",
-                Description = "You have already created request",
-                StatusCode = HttpStatusCode.InternalServerError
-            };
-        }
-        catch (Exception ex)
-        {
-            return new BaseResponse<string>
-            {
-                Description = ex.Message,
-                StatusCode = HttpStatusCode.InternalServerError
-            };
-        }
-    }
+    
 
     public async Task<BaseResponse<ClaimsIdentity>> LoginAsync(LoginViewModel model)
     {
         try 
         { 
             var userExist = await (from account in _accountRepository.Select()
-                                   where account.Login == model.Login
+                                   where account.Login == model.Login || account.Email == model.Login
                                    select account).FirstOrDefaultAsync();
             if (userExist == null)
                 return new BaseResponse<ClaimsIdentity>()
@@ -137,7 +80,7 @@ public class AccountService : IAccountService
                         Login = model.Login,
                         Password = HashPasswordHelper.HashPassowrd(model.Password),
                         AccountConfirmed = false,
-                        Role = Domain.Enums.Role.User
+                        Role = model.Role
                     };
 
                     if (await _accountRepository.Add(account))
@@ -273,5 +216,20 @@ public class AccountService : IAccountService
 
             throw;
         }
-    }    
+    }
+
+    public Task<BaseResponse<Account>> GetAccountByEmailAsync(string email)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<BaseResponse<Account>> ChangingAccountPassword(string email)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<BaseResponse<ClaimsIdentity>> ChangingAccountEmail(string email)
+    {
+        throw new NotImplementedException();
+    }
 }

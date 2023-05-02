@@ -1,0 +1,241 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/*Переменные*/
+
+:root {
+    --index: calc(1vw + 1vh);
+    --transition: transform 0.75s cubic-bezier(0.075, 0.5, 0, 1);
+}
+
+/*Шрифты*/
+
+@font-face {
+    font-family: raleway_f;
+    src: url(../fonts/raleway-regular.woff2);
+}
+
+@font-face {
+    font-family: raleway_f;
+    src: url(../fonts/raleway-black.woff2);
+    font-weight: 900;
+}
+
+body {
+    background-color: #010101;
+    font-family: raleway_f, sans-serif;
+    line-height: 1.55;
+}
+
+/*Начальная Картинка*/
+
+.main-header {
+    position: relative;
+}
+
+/*Общий фон*/
+
+.layers {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    will-change: transform;
+    z-index: 3;
+}
+
+/*Анимация Скроллинга*/
+
+.scroll {
+    letter-spacing: calc(var(--index) / 8);
+}
+
+/*Все слои*/
+
+.layer {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-size: cover;
+    background-position: center;
+    transition: var(--transition);
+}
+
+/*Вторая Картинка*/
+
+.main-article {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    will-change: transform;
+}
+
+.main-article__header {
+    text-transform: uppercase;
+    font-size: calc(var(--index) * 1.6);
+    letter-spacing: calc(var(--index) / 7.5);
+    transform: var(--main-article-transform);
+    will-change: transfrom;
+    transition: var(--transition);
+    font-weight: 900;
+    background-color: rgba(256, 256, 256, 0.4);
+    border-radius: 20px;
+}
+
+/*Анимация Слоёв На Первой Картинке*/
+
+.layers__base {
+    transform: translate3d(0, calc(var(--scrollTop) / 1.6), 0);
+    z-index: 0;
+}
+
+.layers__middle {
+    transform: translate3d(0, calc(var(--scrollTop) / 2.5), 0);
+}
+
+.layers__front {
+    transform: translate3d(0, calc(var(--scrollTop) / 5.7), 0);
+    z-index: 2;
+}
+
+/*Выравнивание Текста На Первой Картинке*/
+
+.layer__header {
+    z-index: 1;
+    will-change: transform;
+    transform: translate3d(0, calc(var(--scrollTop) / 2), 0);
+    text-transform: uppercase;
+    font-weight: 900;
+    color: #2a0805;
+    text-shadow: 0 0 15px #f0f0f0;
+    transition: var(--transition);
+}
+
+.layers__title {
+    font-size: calc(var(--index) * 2.5);
+    letter-spacing: calc(var(--index) / 2.25);
+}
+
+.leyers__caption {
+    font-size: calc(var(--index) / 1.175);
+    letter-spacing: calc(var(--index) / 9);
+    margin-top: calc(var(--index) * -0.75);
+    text-transform: uppercase;
+}
+
+.container {
+    will-change: transform;
+}
+
+/*Активация Записки*/
+
+.layer__link {
+    z-index: 1;
+    pointer-events: auto;
+    clip-path: polygon(
+    calc(50% - 13vh) 34%,
+    calc(50% - 13vh) 45%,
+    calc(50% - 3vh) 45%,
+    calc(50% - .3vh) 34%
+);
+}
+
+/*Активация Книги*/
+
+.book__link {
+    z-index: 2;
+    pointer-events: auto;
+    clip-path: polygon(
+        calc(100% + 10vh) calc(100% - 44vh),
+        calc(100% - 50vh) calc(100% - 45vh),
+        calc(100% - 75vh) calc(100% - 20vh),
+        calc(100% + 10vh) calc(100% - 10vh)
+    );
+}
+
+/*Активация Карты*/
+
+.map__link {
+    z-index: 1;
+    pointer-events: auto;
+    clip-path: polygon(
+        calc(100% + 10vh) calc(100% - 100vh),
+        calc(100% - 60vh) calc(100% - 100vh),
+        calc(100% - 60vh) calc(100% - 67vh),
+        calc(100% + 15vh) calc(100% - 64vh)
+    );
+}
+
+/* Стили для модального окна */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+/*Записка*/
+
+.modal-content {
+    background-image: url(/img/diary.png);
+    margin: 10% auto;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 600px;
+    height: 500px;
+    text-align: center;
+    position: relative;
+    background-position: center center;
+    background-size: contain;
+    overflow: auto;
+}
+
+/*Книжка*/
+
+.modal-content2 {
+    background-image: url(/img/book-background.png);
+    margin: 10% auto;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 900px;
+    height: 500px;
+    text-align: center;
+    position: relative;
+    background-position: center center;
+    background-size: contain;
+    overflow: auto;
+}
+
+/* Кнопка Закрытия */
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}

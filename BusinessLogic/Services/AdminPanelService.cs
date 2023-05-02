@@ -81,9 +81,9 @@ public class AdminPanelService : IAdminPanelService
                     StatusCode = HttpStatusCode.InternalServerError,
                     Description = "Server error"
                 };
-            if (admin.Role == Role.Admin && model.Role != Role.Admin)
+            if (admin.Role == Role.Admin && model.Role == Role.Admin)
             {
-                if (admin.Role == Role.Admin && model.Role != Role.Admin || admin.Role == Role.Manager && model.Role == Role.Manager)
+                if (admin.Role == Role.Admin && model.Role == Role.Admin || admin.Role == Role.Manager && model.Role == Role.Manager)
                 {
                     var user = await _accountRepository.Select().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
 
@@ -115,31 +115,6 @@ public class AdminPanelService : IAdminPanelService
         var accounts = await _accountRepository.Select().ToListAsync();
 
         _memoryCache.Set(_listKey, accounts, cacheOptions);
-    }
-
-    public async Task<BaseResponse<RequestsOnChangingRoleViewModel>> GetRequestsOnChangingRoleAsync()
-    {
-        try
-        {
-            RequestsOnChangingRoleViewModel requestsOnChangingRole;
-            var source = GetRequestsOnChangingRoleFromCache();
-
-            requestsOnChangingRole = new(source);
-
-            return new BaseResponse<RequestsOnChangingRoleViewModel>
-            {
-                Data = requestsOnChangingRole,
-                StatusCode = System.Net.HttpStatusCode.OK,
-            };
-        }
-        catch (Exception ex)
-        {
-            return new BaseResponse<RequestsOnChangingRoleViewModel>
-            {
-                Description = ex.Message,
-                StatusCode = System.Net.HttpStatusCode.InternalServerError
-            };
-        }
     }
 
     public async Task<BaseResponse<AdminPanelAccountViewModel>> GetAccountFromCacheAsync(int id)

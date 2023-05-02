@@ -1,4 +1,5 @@
-﻿@model Domain.ViewModels.Account.RegistrationViewModel
+﻿@using Domain.Enums
+@model Domain.ViewModels.Account.RegistrationViewModel
 @{
 }
 
@@ -17,6 +18,12 @@
             <input type="text" class="form-control" asp-for="Login">
             <span class="text-danger" asp-validation-for="Login" data-valmsg-replace="true"></span>
         </div>
+    </div>
+    <div class="col-12">
+        <label class="form-labe" for="specificSizeSelect">Choose role</label>
+        <select asp-for="Role" asp-items="Html.GetEnumSelectList<RoleForRegistrationPage>()" class="form-select">
+            <option value="Choose">Choose</option>
+        </select>
     </div>
     <div class="mb-3">
         <label class="form-label" >Password:</label>

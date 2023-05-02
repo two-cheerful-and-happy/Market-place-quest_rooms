@@ -72,13 +72,4 @@ public class AdminPanelController : Controller
         }
         return PartialView();
     }
-
-    [HttpGet]
-    public async Task<ActionResult> RequestsOnChangingRole()
-    {
-        var response = await _adminPanelService.GetRequestsOnChangingRoleAsync();
-        if(response.StatusCode == System.Net.HttpStatusCode.OK)
-            return View(response.Data);
-        return View("Error", response.Data);
-    }
 }

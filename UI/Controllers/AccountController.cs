@@ -109,32 +109,9 @@ public class AccountController : Controller
         return View(model);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> CreateRequestToChangingRole()
-    {
-        
-        CreateRequestToChangingRoleViewModel model = new();
-        model.RequestedRole = Domain.Enums.Role.OwnerOfRooms;
-        return PartialView(model);
-    }
-
-    public async Task<IActionResult> SubmitRequestOnChangingRole(CreateRequestToChangingRoleViewModel model)
-    {
-        if(ModelState.IsValid) 
-        {
-            model.Login = User.Identity.Name;
-            var response = await _accountService.CreateNewRequestOnChangingRole(model); 
-            if(response.StatusCode == HttpStatusCode.OK)
-                return View("SuccessPopupWindow");
-            ModelState.AddModelError(response.Data, response.Description);
-        }
-        model.IsRepeate = true;
-        return PartialView(model);
-    }
-
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        return RedirectToAction("Index", "Map");
+        return RedirectToAction("Index", "Home");
     }
 }

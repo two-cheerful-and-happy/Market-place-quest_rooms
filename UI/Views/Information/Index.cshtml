@@ -1,0 +1,74 @@
+﻿@{
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/main.css" />
+
+    <script src="~/js/gsap/gsap.min.js" defer></script>
+    <script src="~/js/gsap/ScrollSmoother.min.js" defer></script>
+    <script src="~/js/gsap/ScrollTrigger.min.js" defer></script>
+
+    <script src="~/js/app.js" defer></script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <header class="main-header">
+                <div class="layers">
+                    <div class="layer__header">
+                        <div class="leyers__caption">Welcome to the darkness where</div>
+                        <div class="layers__title">Nightmares</div>
+                        <div class="scroll">Scroll down the page if you dare</div>
+                    </div>
+                    <div class="layer layers__base"
+                         style="background-image: url(../../img/layer-base.png)">
+                    </div>
+                    <div class="layer layers__middle"
+                         style="background-image: url(../../img/layer-middle.png)">
+                    </div>
+                    <div class="layer layers__front"
+                         style="background-image: url(../../img/layer-front.png)">
+                    </div>
+                </div>
+            </header>
+            <article class="main-article">
+                <a  class="layer layer__link" id="modalButton1">
+                    <div class="layer layer__back"
+                         style="background-image: url(../../img/photoback.png)">
+                    </div>
+                </a>
+                <a  class="layer book__link" id="modalButton2">
+                    <div class="layer layer__book"
+                         id="modal2div"
+                         style="background-image: url(../../img/backgroundbook.png)">
+                     </div>
+                </a>
+                <a asp-action="Index" asp-controller="Map" class="layer map__link">
+                    <div class="layer layer__book"
+                    style="background-image: url(../../img/map.png)"></div>
+                </a>
+                <div class="layer layer-base"
+                     style="background-image: url(../../img/layer-base.gif)"></div>
+                <!-- Модальное окно №1 -->
+                <div class="modal" id="modal1">
+                    <div class="modal-content">
+                        <span class="close-button" id="closeButton1">&times;</span>
+                    </div>
+                </div>
+                <!-- Модальное окно №2 -->
+                <div class="modal" id="modal2">
+                    <div class="modal-content2">
+                        <span class="close-button" id="closeButton2">&times;</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</body>
+</html>
