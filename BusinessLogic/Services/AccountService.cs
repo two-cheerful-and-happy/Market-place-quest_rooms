@@ -42,7 +42,8 @@ public class AccountService : IAccountService
 
             if (HashPasswordHelper.HashPassowrd(model.Password) == userExist.Password)
             {
-                model.Role = model.Role;
+                model.Role = userExist.Role;
+                model.Login = userExist.Login;
                 return new BaseResponse<ClaimsIdentity>()
                 {
                     Data = Authenticate(model),
