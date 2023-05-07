@@ -1,23 +1,74 @@
-﻿@model Domain.ViewModels.Account.LoginViewModel
+﻿@using Domain.Enums
+@model Domain.ViewModels.Account.LoginRegistrationViewModel
 @{
-
+    ViewBag.currentPath = "Account/Login";
 }
-
-@using (Html.BeginForm("Login", "Account", FormMethod.Post))
-{
-    <div class="mb-3">
-        <label class="form-label">Login:</label>
-        <div>
-            <input type="text" class="form-control" asp-for="Login">
-            <span class="text-danger" asp-validation-for="Login" data-valmsg-replace="true"></span>
+    <article class="container">
+        <!--Внуwтриний Блок-->
+        <div class="block">
+            <section class="block__item block-item">
+                <h2 class="block-item__title">Already have an account?</h2>
+                <buttom class="block-item__btn signin-btn">Login</buttom>
+            </section>
+            <section class="block__item block-item">
+                <h2 class="block-item__title">Don't have an account?</h2>
+                <buttom class="block-item__btn signup-btn">Sign up</buttom>
+            </section>
         </div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Password:</label>
-        <div>
-            <input type="password" asp-for="Password" class="form-control">
-            <span class="text-danger" asp-validation-for="Password" data-valmsg-replace="true"></span>
+        <!--Блок Формы-->
+        <div class="form-box">
+            <!--Форма Входа-->
+            <form asp-action="Login" asp-controller="Account" method="post" class="form form_signin">
+                <h3 class="form__title">
+                    Login
+                </h3>
+                <p>
+                    <input asp-for="Login.Login" type="text" class="form__input" placeholder="nickname">
+                    <span class="text-danger" asp-validation-for="Login.Login" data-valmsg-replace="true"></span>
+                </p>
+                <p>
+                    <input asp-for="Login.Password" type="password" class="form__input" placeholder="password">
+                    <span class="text-danger" asp-validation-for="Login.Password" data-valmsg-replace="true"></span>
+                </p>
+                <p>
+                    <button class="form__btn">Login</button>
+                </p>
+                <p>
+                    <a onclick="openRequestToCahngeModal({ url: '@Url.Action("RequestToChangePassword", "Account")' })" class="form__forgot">
+                        Don't remember the password?
+                    </a>
+                </p>
+            </form>
+            <!--Форма Регестрации-->
+            <form asp-action="Registration" asp-controller="Account" method="post" class="form form_signup">
+                <h3 class="form__title">
+                    Sign up
+                </h3>
+                <p>
+                    <input type="text" asp-for="Registration.Login" class="form__input" placeholder="nickname">
+                    <span class="text-danger" asp-validation-for="Registration.Login" data-valmsg-replace="true"></span>
+                </p>
+                <p>
+                    <input type="email" asp-for="Registration.Email" class="form__input" placeholder="email">
+                    <span class="text-danger" asp-validation-for="Registration.Email" data-valmsg-replace="true"></span>
+                </p>
+                <p>
+                    <input type="password" asp-for="Registration.Password" class="form__input" placeholder="password">
+                    <span class="text-danger" asp-validation-for="Registration.Password" data-valmsg-replace="true"></span>
+                </p>
+                <p>
+                    <input type="password" asp-for="Registration.PasswordConfirm" class="form__input" placeholder="confirm the password">
+                    <span class="text-danger" asp-validation-for="Registration.Email" data-valmsg-replace="true"></span>
+                </p>
+                <div class="select">
+                <select asp-for="Registration.Role" asp-items="Html.GetEnumSelectList<RoleForRegistrationPage>()" class="form-select">
+                    <option value="Choose">Choose Your Role</option>
+                 </select>
+                 </div>
+                <span class="text-danger" asp-validation-for="Registration.Role" data-valmsg-replace="true"></span>
+                <p>
+                    <button class="form__btn from__btn__signup">Sign Up</button>
+                </p>
+            </form>
         </div>
-    </div>
-    <button>Submit</button>
-}
+    </article>

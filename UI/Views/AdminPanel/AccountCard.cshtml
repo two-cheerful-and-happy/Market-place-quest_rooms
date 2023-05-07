@@ -3,7 +3,27 @@
 
                     <form class="row g-3" asp-action="ChangeRoleOfAccount" asp-controller="AdminPanel" method="post">
                         <input asp-for="Id" hidden>
-                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-element">
+                            <label asp-for="Email" class="form-label">@Model.Login</label>
+                            <input asp-for="Email" type="email" class="form-control" readonly>
+                        </div>
+                        <div class="form-element">
+                            <label asp-for="Login" class="form-label"></label>
+                            <input asp-for="Login" type="text" class="form-control" readonly>
+                        </div>
+                        <div class="form-element">
+                            <label asp-for="AccountConfirmed" class="form-label"></label>
+                            <input asp-for="AccountConfirmed" type="text" class="form-control" readonly>
+                        </div>
+                        <div class="form-element">
+                            <select asp-for="@Model.Role" asp-items="Html.GetEnumSelectList<Role>()" class="form-select">
+                                <option value="@Model.Role">@Model.Role</option>
+                            </select>
+                        </div>
+                        <div class="form-element">
+                            <button>Submit</button>
+                        </div>
+                        @*<div asp-validation-summary="All" class="text-danger"></div>
                         <div class="col-md-12">
                             <label asp-for="Email" class="form-label">@Model.Login</label>
                             <input asp-for="Email" type="email" class="form-control" readonly>
@@ -24,5 +44,6 @@
                         </div>
                         <div class="col-auto">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
+                        </div>*@
                     </form>
+@*<h2>Example</h2>*@

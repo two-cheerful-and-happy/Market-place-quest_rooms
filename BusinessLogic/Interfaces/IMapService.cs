@@ -1,4 +1,6 @@
-﻿namespace BusinessLogic.Interfaces;
+﻿using Domain.ViewModels.OwnerOfRoom;
+
+namespace BusinessLogic.Interfaces;
 
 public interface IMapService
 {
@@ -6,4 +8,5 @@ public interface IMapService
     
     Task<BaseResponse<Location>> AddNewLocationAsync(Location location);
 
+    Location CreateNewLocato(AddNewLocationViewModel location);
 }

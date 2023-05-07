@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Domain.Helpers;
+using DataAccessLayer.EF;
 
 namespace DataAccessLayer.Entity_Framework;
 
@@ -53,6 +54,23 @@ public class ApplicationDbContext : DbContext
                 .IsRequired();
 
             buildAction
+                .Property(x => x.Address)
+                .HasColumnType("VARCHAR(500)")
+                .HasColumnName("Address")
+                .IsRequired();
+
+            buildAction
+                .Property(x => x.PhoneNumber)
+                .HasColumnType("VARCHAR(30)")
+                .HasColumnName("PhoneNumber")
+                .IsRequired();
+
+            buildAction
+                .Property(x => x.Birthday)
+                .HasColumnName("Birthday")
+                .HasConversion<DateOnlyConverter, DateOnlyComparer>();
+
+            buildAction
                 .Property(x => x.Role)
                 .HasColumnType("VARCHAR(20)")
                 .HasColumnName("Role")
@@ -75,12 +93,16 @@ public class ApplicationDbContext : DbContext
                 .HasData(new Account
                 {
                     Id = 1,
-                    AccountConfirmed= true,
+                    AccountConfirmed = true,
                     Email = "denyschk@gmail.com",
                     Login = "Goose",
-                    Password =  HashPasswordHelper.HashPassowrd("12345678"),
-                    Role = Domain.Enums.Role.Admin
-                });
+                    Password = HashPasswordHelper.HashPassowrd("12345678"),
+                    Role = Domain.Enums.Role.Admin,
+                    Address = "Dom",
+                    Birthday = new DateOnly(2022, 1, 1),
+                    PhoneNumber = "+0502689846"
+
+                }); 
         });
 
         modelBuilder.Entity<Location>(buildAction =>

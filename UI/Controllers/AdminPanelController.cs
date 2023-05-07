@@ -58,7 +58,7 @@ public class AdminPanelController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> ConfirmChangingRoleWindow(string id)
+    public IActionResult ConfirmChangingRoleWindow(string id)
     {
         return PartialView("ConfirmChangingRoleWindow", id);
     }

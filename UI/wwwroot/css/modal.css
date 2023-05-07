@@ -1,0 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.frame {
+    background: #D3C9AE;
+}
+
+:root {
+    --eerie-black-2: hsl(240, 2%, 12%);
+    --onyx: hsl(240, 1%, 17%);
+    --smoky-black: hsl(0, 0%, 7%);
+    --shadow-5: 0 24px 80px hsla(0, 0%, 0%, 0.25);
+    --jet: hsl(0, 0%, 22%);
+    --color: #F7DC6F;
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.center button {
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2A0805;
+    background: #9C8E6D;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.popup {
+    position: absolute;
+    top: -150%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    background: var(--eerie-black-2);
+    padding: 15px;
+    margin: 15px 12px;
+    border: 1px solid var(--jet);
+    border-radius: 14px;
+    box-shadow: var(--shadow-5);
+    transform: scale(1.2);
+    z-index: 2;
+}
+
+.popup.active {
+    top: 50%;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.popup .close-popup {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    height: 25px;
+    width: 25px;
+    background: var(--onyx);
+    color: var(--color);
+    text-align: center;
+    line-height: 25px;
+    border-radius: 11px;
+    cursor: pointer;
+    font-weight: 900;
+}
+
+.popup .form-popup h2 {
+    text-align: center;
+    color: var(--color);
+    margin: 10px 0 20px;
+    font-size: 25px;
+}
+
+.popup .form-popup .form-element {
+    margin: 15px 0px;
+}
+
+.popup .form-popup .form-element label {
+    font-size: 14px;
+    color: var(--color);
+}
+
+.popup .form-popup .form-element input[type="email"],
+.popup .form-popup .form-element input[type="text"], select {
+    margin-top: 5px;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    border: 1px solid var(--color);
+    border-radius: 5px;
+}
+
+.popup .form-popup .form-element button {
+    width: 100%;
+    height: 40px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: var(--smoky-black);
+    color: var(--color);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+select, input::placeholder {
+    color: var(--smoky-black);
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1;
+    display: none;
+}
+

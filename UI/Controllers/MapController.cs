@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.Interfaces;
+using Domain.ViewModels.Map;
 
 namespace UI.Controllers;
 
@@ -53,5 +54,23 @@ public class MapController : Controller
     };
 
         return Json(myObjects);
+    }
+
+    [HttpGet]
+    public IActionResult Search()
+    {
+        return PartialView("SearchModal");
+    }
+
+    [HttpPost]
+    public IActionResult Search(SearchViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            
+
+            return RedirectToAction("Index");
+        }
+        return RedirectToAction("Index");
     }
 }

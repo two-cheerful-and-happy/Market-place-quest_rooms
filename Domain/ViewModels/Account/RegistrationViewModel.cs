@@ -18,6 +18,7 @@ public class RegistrationViewModel
     [Compare("Password", ErrorMessage = "Password dosen't compare")]
     public string PasswordConfirm { get; set; }
 
+    [Required(ErrorMessage = "You must choose role")]
     public Role Role { get; set; }
 
     public List<ValidationResult> AdditionalErrors { get; set; } = new List<ValidationResult>();

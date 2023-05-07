@@ -1,0 +1,13 @@
+﻿@model Domain.ViewModels.Map.SearchViewModel
+@{
+}
+@using (Html.BeginForm("SendRequestToChangingPassword", "Account", FormMethod.Post))
+{
+        <div class="mb-3">
+            <label class="form-label">Search:</label>
+            <div>
+                <input type="text" class="form-control" asp-for="Search">
+            </div>
+        </div>
+        <button>Search</button>
+}

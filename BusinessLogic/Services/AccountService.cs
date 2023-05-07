@@ -1,4 +1,6 @@
-﻿namespace BusinessLogic.Services;
+﻿using Domain.DTO;
+
+namespace BusinessLogic.Services;
 
 public class AccountService : IAccountService
 {
@@ -47,13 +49,52 @@ public class AccountService : IAccountService
                 return new BaseResponse<ClaimsIdentity>()
                 {
                     Data = Authenticate(model),
-                    StatusCode = HttpStatusCode.OK
+                    StatusCode = HttpStatusCode.OK,
+                    Description = userExist.Role.ToString()
                 };
             }
             return new BaseResponse<ClaimsIdentity>()
             {
                 StatusCode = HttpStatusCode.Unauthorized,
                 Description = "Password is wrong"
+            };
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public async Task<BaseResponse<ValidationResult>> ChangePasswordAsync(ChangingAccountPasswordViewModel model)
+    {
+        try
+        {
+            var user = await _accountRepository.Select().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+            if(user.Password == HashPasswordHelper.HashPassowrd(model.Password))
+                return new BaseResponse<ValidationResult>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Data = new ValidationResult("The password is the same.", new List<string> { "Password" })
+                };
+            if (MaskPassword(model.Password))
+            {
+                user.Password = HashPasswordHelper.HashPassowrd(model.Password);
+                if (await _accountRepository.Update(user))
+                    return new BaseResponse<ValidationResult>()
+                    {
+                        StatusCode = HttpStatusCode.OK
+                    };
+                return new BaseResponse<ValidationResult>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError,
+                    Data = new ValidationResult("The password must not contain Cyrillic characters.", new List<string> { "Password" })
+                };
+            }
+            return new BaseResponse<ValidationResult>
+            {
+                StatusCode = HttpStatusCode.InternalServerError,
+                Data = new ValidationResult("The password must not contain Cyrillic characters.", new List<string> { "Password" })
             };
         }
         catch (Exception)
@@ -140,6 +181,39 @@ public class AccountService : IAccountService
         }
     }
 
+    public async Task<BaseResponse<Account>> GetAccountByEmailAsync(string email)
+    {
+        try
+        {
+            var user = await _accountRepository.Select().Where(x => x.Email == email).FirstOrDefaultAsync();
+            if(user == null)
+                return new BaseResponse<Account>
+                {
+                    StatusCode = HttpStatusCode.InternalServerError
+                };
+            return new BaseResponse<Account>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = user
+            };
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public Task<BaseResponse<string>> ChangingAccountPassword(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<BaseResponse<string>> ChangingAccountEmail(int id)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task<BaseResponse<string>> ConfirmAccountAsync(int id, string hashLogin)
     {
         try
@@ -219,18 +293,44 @@ public class AccountService : IAccountService
         }
     }
 
-    public Task<BaseResponse<Account>> GetAccountByEmailAsync(string email)
+    public async Task<BaseResponse<Account>> GetAccountByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var user = await _accountRepository.Select().Where(x => x.Id == id).FirstOrDefaultAsync();
+            return new BaseResponse<Account>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = user
+            };
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
-    public Task<BaseResponse<Account>> ChangingAccountPassword(string email)
+    public AccountCookieData GetCookieAccountByLogin(string login)
     {
-        throw new NotImplementedException();
-    }
+        try
+        {
+            var user = (from p in _accountRepository.Select()
+                       where p.Login == login
+                       select new AccountCookieData 
+                       {
+                           Login = p.Login,
+                           Address = p.Address,
+                           Birthday = p.Birthday,
+                           Email = p.Email,
+                           PhoneNumber = p.PhoneNumber,
+                           Role = p.Role
+                       }).FirstOrDefault();
+            return user;
+        }
+        catch (Exception)
+        {
 
-    public Task<BaseResponse<ClaimsIdentity>> ChangingAccountEmail(string email)
-    {
-        throw new NotImplementedException();
+            throw;
+        }
     }
 }

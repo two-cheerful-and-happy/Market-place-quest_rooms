@@ -1,15 +1,22 @@
 ﻿using DataAccessLayer.Interfaces;
+using Domain.ViewModels.OwnerOfRoom;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BusinessLogic.Services;
 
 public class MapService : IMapService
 {
     private readonly IBaseRepository<Location> _locationRepositor;
+    private readonly IMemoryCache _memoryCache;
+    private const string _listKey = "AccountsListKey";
 
-    public MapService(IBaseRepository<Location> locationRepositor)
+    public MapService(
+        IBaseRepository<Location> locationRepositor,
+        IMemoryCache memoryCache)
     {
         _locationRepositor = locationRepositor;
+        _memoryCache = memoryCache;
     }
 
     public async Task<BaseResponse<Location>> AddNewLocationAsync(Location location)
@@ -27,6 +34,18 @@ public class MapService : IMapService
         }
     }
 
+    public Location CreateNewLocato(AddNewLocationViewModel location)
+    {
+        return new Location 
+        {
+            Name = location.Name,
+            Description = location.Description,
+            Address = location.Address,
+            LocationConfirmed = false,
+            
+        };   
+    }
+
     public async Task<List<Location>> GetLocationsAsync()
     {
         try
@@ -37,5 +56,10 @@ public class MapService : IMapService
         {
             return null;
         }
+    }
+
+    private void SetToCacheLocations()
+    {
+
     }
 }
