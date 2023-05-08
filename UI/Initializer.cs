@@ -10,7 +10,6 @@ public static class Initializer
         services.AddScoped<IBaseRepository<Account>, AccountRepository>();
         services.AddScoped<IBaseRepository<Photo>, PhotoRepository>();
         services.AddScoped<IBaseRepository<Comment>, CommentRepository>();
-        services.AddScoped<IBaseRepository<RequestOnChangingRole>, RequestOnChangingRoleRepository>();
     }
 
     public static void InitializeServices(this IServiceCollection services)

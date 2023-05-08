@@ -6,17 +6,17 @@ public class AccountService : IAccountService
 {
     private readonly IBaseRepository<Account> _accountRepository;
     private readonly IBaseRepository<Location> _locationRepository;
-    private readonly IBaseRepository<RequestOnChangingRole> _requestOnChangingRoleRepository;
+    
 
     public AccountService(
         IBaseRepository<Account> accountRepository,
-        IBaseRepository<Location> locationRepository,
-        IBaseRepository<RequestOnChangingRole> requestOnChangingRoleRepository)
+        IBaseRepository<Location> locationRepository
+        )
        
     {
         _accountRepository = accountRepository;
         _locationRepository = locationRepository;
-       _requestOnChangingRoleRepository = requestOnChangingRoleRepository;
+       
     }
 
     
@@ -26,13 +26,13 @@ public class AccountService : IAccountService
         try 
         { 
             var userExist = await (from account in _accountRepository.Select()
-                                   where account.Login == model.Login || account.Email == model.Login
+                                   where account.Login == model.Login || account.Email == model.Login && account.AccountConfirmed == true
                                    select account).FirstOrDefaultAsync();
             if (userExist == null)
                 return new BaseResponse<ClaimsIdentity>()
                 {
                     StatusCode = HttpStatusCode.Unauthorized,
-                    Description = "User dose not exist"
+                    Description = "User dose not exist, or account dosen't confirmed"
                 };
 
             if(!userExist.AccountConfirmed)
@@ -139,13 +139,13 @@ public class AccountService : IAccountService
                 return new BaseResponse<ValidationResult>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
-                    Data = new ValidationResult("Password must have numbers and only latin chars.", new List<string> { "Password" })
+                    Data = new ValidationResult("Password must have numbers and only latin chars.", new List<string> { "Registration.Password" })
                 };
             }
             return new BaseResponse<ValidationResult>
             {
                 StatusCode = HttpStatusCode.InternalServerError,
-                Data = new ValidationResult("Login or email have already used.", new List<string> { "Login", "Email"})
+                Data = new ValidationResult("Login or email have already used.", new List<string> { "Registration.Login", "Registration.Email" })
             };
         }
         catch (Exception)

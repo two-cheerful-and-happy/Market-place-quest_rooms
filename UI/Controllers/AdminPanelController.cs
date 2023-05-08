@@ -3,10 +3,11 @@ using Domain.ViewModels.AdditionalViewModel;
 using Domain.ViewModels.AdminPanel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System.Data;
 
 namespace UI.Controllers;
 
-//[Authorize( Roles = "Admin, Manager")]
+[Authorize(Roles = "Admin, Manager")]
 public class AdminPanelController : Controller
 {
     private readonly IAccountService _accountService;
@@ -24,8 +25,7 @@ public class AdminPanelController : Controller
     public async Task<IActionResult> Panel(Role? role, string? login, int page = 1)
     {
         NewFilterOfAccountPanel newFilterOfAccount = new(role.ToString(), login, page);
-        var response = await _adminPanelService.SetPanelViewModel(newFilterOfAccount);
-        var a = response.Data.Accounts.FirstOrDefault();
+        var response = await _adminPanelService.SetPanelViewModel(newFilterOfAccount, false);
         return View(response.Data);
     }
 
@@ -71,5 +71,13 @@ public class AdminPanelController : Controller
 
         }
         return PartialView();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> UpdatePanelData()
+    {
+        NewFilterOfAccountPanel newFilterOfAccount = new(null, null, 1);
+        var response = await _adminPanelService.SetPanelViewModel(newFilterOfAccount, true);
+        return View("Panel");
     }
 }

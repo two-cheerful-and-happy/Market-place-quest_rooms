@@ -1,7 +1,89 @@
 ﻿@model Domain.ViewModels.AdminPanel.PanelViewModel 
 @{
+    ViewBag.currentPath = "AdminPanel/Panel";
+
 }
-<div class="text-center" role="alert">
+
+<div class="container">
+    <section class="main">
+        <div class="upper-table">
+            <form method="get">
+                <input class="upper-btn-1" placeholder="Login.." name="login">
+                <select class="upper-btn-2" asp-items="@Model.FilterUserMangeViewModel.Roles" name="role"></select>
+                <div class="sub-btn">
+                    <button type="submit" class="sub-btn-1">Filter</button>
+                </div>
+            </form>
+        </div>
+        <section class="attendance">
+            <div class="attendance-list">
+                <h1>Admin Panel</h1>
+                <button class="data" onclick="updateDataOfTable({ url: '@Url.Action("UpdatePanelData", "AdminPanel")'})">Update Data</button>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (Model.Accounts.Count() > 0)
+                            {
+                                foreach (var Data in Model.Accounts)
+                                {
+                                    <tr class="not-active">
+                                        <td>@Data.Id</td>
+                                        <td>@Data.Login</td>
+                                        <td>@Data.Role</td>
+                                        <td>
+                                            <button type="submit" onclick="openModalForm({ url: '@Url.Action("GetUserCard", "AdminPanel")', data: @Data.Id })">
+                                                Show
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr class="not-active">
+                                    <td style="text-align:center" colspan="4">List is empty.</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (Model.PageViewModel.HasPreviousPage || Model.PageViewModel.HasNextPage)
+            {
+                <div class="under-table">
+                    @if (Model.PageViewModel.HasPreviousPage)
+                    {
+                        <a class="under-btn-1"
+                       asp-action="Panel"
+                       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+                       role="button">
+                            Back
+                        </a>
+                    }
+                    @if (Model.PageViewModel.HasNextPage)
+                    {
+                        <a class="under-btn-2"
+                       asp-action="Panel"
+                       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+                       role="button">
+                            Next
+                        </a>
+                    }
+                </div>
+            }
+        </section>
+    </section>
+</div>
+
+@*<div class="text-center" role="alert">
     <div class="row justify-content-center">
         <h1 style="align-content:center">Administration panel</h1>
     </div>
@@ -77,4 +159,4 @@
             next
         </a>
     }
-</div>
+</div>*@

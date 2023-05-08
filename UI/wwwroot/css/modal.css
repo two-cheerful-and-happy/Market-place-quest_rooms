@@ -15,6 +15,7 @@
     --shadow-5: 0 24px 80px hsla(0, 0%, 0%, 0.25);
     --jet: hsl(0, 0%, 22%);
     --color: #F7DC6F;
+    --color-3: rgba(247, 220, 111, .5);
 }
 
 .center {
@@ -99,6 +100,8 @@
     outline: none;
     border: 1px solid var(--color);
     border-radius: 5px;
+    color: var(--color);
+    background-color: var(--onyx)
 }
 
 .popup .form-popup .form-element button {
@@ -114,7 +117,7 @@
 }
 
 select, input::placeholder {
-    color: var(--smoky-black);
+    color: var(--color);
 }
 
 #overlay {
@@ -128,3 +131,10 @@ select, input::placeholder {
     display: none;
 }
 
+input::placeholder{
+    color: var(--color-3);
+}
+
+option {
+    color: var(--color);
+}

@@ -191,7 +191,7 @@ body.active {
 .select {
     position: relative;
 }
-.select select {
+.select .select-login {
     display: block;
     width: 100%; /* от ширины блока div */
     padding: .75rem 2.5rem .75rem 1rem;/* отступы от текста до рамки */
@@ -204,6 +204,8 @@ body.active {
     font-family: inherit;
     font-size: 1rem;
     color: #2A0805;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 .select:after {
     content: "";
@@ -532,3 +534,13 @@ body.active {
 .modal-name {
     color: #2A0805;
 }
+option {
+    background-color: var(--onyx);
+    text-align: center;
+}
+
+.form__input::placeholder {
+    color: rgba(0,0,0,.5);
+    border-color: none;
+}
+

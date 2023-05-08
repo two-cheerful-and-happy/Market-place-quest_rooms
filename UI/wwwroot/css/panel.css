@@ -1,0 +1,216 @@
+/*  import google fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+*{
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body{
+  background: #D3C9AE;
+}
+
+:root {
+    --eerie-black-2: hsl(240, 2%, 12%);
+    --onyx: hsl(240, 1%, 17%);
+    --smoky-black: hsl(0, 0%, 7%);
+    --shadow-5: 0 24px 80px hsla(0, 0%, 0%, 0.25);
+    --jet: hsl(0, 0%, 22%);
+    --color: #F7DC6F;
+    --color-2: #D3C9AE;
+    --color-3: rgba(247, 220, 111, .5);
+}
+
+.container{
+  display: flex;
+}
+
+/* MAin Section */
+.main{
+  position: relative;
+  padding: 20px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin: 0 70px;
+}
+
+/*Attendance List serction  */
+.attendance{
+  margin-top: 20px;
+  text-transform: capitalize;
+}
+
+h1 {
+    color: var(--color);
+}
+
+.not-active {
+    color: var(--color-2);
+}
+
+.attendance-list{
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: var(--eerie-black-2);
+  border-radius: 10px;
+  box-shadow: 0 20px 35px var(--shadow-5);
+}
+.table{
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 15px;
+  min-width: 100%;
+  overflow: hidden;
+  border-radius: 5px 5px 0 0;
+}
+table thead tr{
+  color: var(--smoky-black);
+  background: var(--color);
+  text-align: left;
+  font-weight: bold;
+}
+.table th,
+.table td{
+  padding: 12px 15px;
+}
+.table tbody tr{
+  border-bottom: 1px solid var(--color);
+}
+.table tbody tr:nth-of-type(odd){
+  background: var(--onyx);
+}
+.table tbody tr.active{
+  font-weight: bold;
+  color: var(--color);
+}
+.table tbody tr:last-of-type{
+  border-bottom: 2px solid var(--color);
+}
+.table button{
+  padding: 6px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--color-2);
+  border: 1px solid var(--color);
+}
+.table button:hover{
+  background: var(--color);
+  color: var(--smoky-black);
+  transition: 0.5rem;
+}
+
+.under-table {
+    position: relative;
+    background-color: var(--onyx);
+    margin-top: 20px;
+    padding: 6px 20px;
+    border-radius: 10px;
+    color: var(--color-2);
+}
+
+.under-btn-1 {
+    padding: 6px 23%;
+    border-radius: 10px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--color);
+    border: 1px solid var(--color);
+}
+
+.under-btn-2 {
+    position: absolute;
+    padding: 6px 23%;
+    border-radius: 10px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--color);
+    border: 1px solid var(--color);
+    right: 0;
+    margin-right: 15px;
+}
+
+button:hover {
+    background: var(--color);
+    color: var(--smoky-black);
+    transition: .7s;
+}
+
+.data {
+    position: absolute;
+    padding: 6px 10%;
+    border-radius: 10px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--color);
+    border: 1px solid var(--color);
+    right: 0;
+    margin-right: 15px;
+    top: 200px;
+    right: 16px;
+}
+
+.upper-table {
+    position: relative;
+    background-color: var(--onyx);
+    margin-top: 20px;
+    padding: 6px 20px;
+    border-radius: 10px;
+    color: var(--color-2);
+    border: 1px solid var(--color);
+}
+
+.upper-btn-1 {
+    text-align: center;
+    padding: 6px 15%;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--color);
+    border: 1px solid var(--color);
+}
+
+.upper-btn-2 {
+    padding: 6px 23%;
+    border-radius: 10px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--color);
+    border: 1px solid var(--color);
+    right: 0;
+    margin-right: 15px;
+}
+
+.sub-btn {
+    position: relative;
+    background-color: var(--onyx);
+    margin-top: 20px;
+    padding: 15px 20px;
+    border-radius: 10px;
+    color: var(--color-2);
+}
+
+.sub-btn-1 {
+    position: absolute;
+    padding: 6px 10%;
+    border-radius: 10px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--color);
+    border: 1px solid var(--color);
+    top: -10px;
+    right: 0;
+}
+
+input::placeholder {
+    color: var(--color-3);
+}
+
+option {
+    background-color: var(--onyx);
+    text-align-last:     center;
+}
