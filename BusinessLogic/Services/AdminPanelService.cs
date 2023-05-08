@@ -14,7 +14,7 @@ namespace BusinessLogic.Services;
 public class AdminPanelService : IAdminPanelService
 {
     private readonly IBaseRepository<Account> _accountRepository;
-    private readonly IBaseRepository<RequestOnChangingRole> _requestOnChangingRoleRepository;
+    
     private readonly IMemoryCache _memoryCache;
     private const string _listKey = "AccountsListKey";
     private const string _requestsOnChangingRoleListKey = "RequestsOnChangingRoleListKey";
@@ -22,10 +22,8 @@ public class AdminPanelService : IAdminPanelService
 
     public AdminPanelService(
         IBaseRepository<Account> accountRepository,
-        IBaseRepository<RequestOnChangingRole> requestOnChangingRoleRepository,
         IMemoryCache memoryCache)
     {
-        _requestOnChangingRoleRepository = requestOnChangingRoleRepository;
         _accountRepository = accountRepository;
         _memoryCache = memoryCache;
 
@@ -37,13 +35,18 @@ public class AdminPanelService : IAdminPanelService
 
     
 
-    public async Task<BaseResponse<PanelViewModel>> SetPanelViewModel(NewFilterOfAccountPanel newFilter)
+    public async Task<BaseResponse<PanelViewModel>> SetPanelViewModel(NewFilterOfAccountPanel newFilter, bool isUpdate)
     {
         try
         {
             PanelViewModel panelViewModel;
-            IEnumerable<AdminPanelAccountViewModel> source = GetAccountsFromCache();
-            int pageSize = 16;
+            IEnumerable<AdminPanelAccountViewModel> source; 
+            if (isUpdate)
+                source = UpdateAccountsInCache();
+            else
+                source = GetAccountsFromCache();
+
+            int pageSize = 15;
             if (!string.IsNullOrEmpty(newFilter.Role))
                 source = source.Where(x => x.Role.ToString() == newFilter.Role);
             if(!string.IsNullOrEmpty(newFilter.Login))
@@ -75,30 +78,50 @@ public class AdminPanelService : IAdminPanelService
         try
         {
             var admin = await _accountRepository.Select().Where(x => x.Login == loginOfAdmin).FirstOrDefaultAsync();
-            if(admin == null)
+            var user = await _accountRepository.Select().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+            if (admin == null)
                 return new BaseResponse<AdminPanelAccountViewModel>
                 {
                     StatusCode = HttpStatusCode.InternalServerError,
                     Description = "Server error"
                 };
-            if (admin.Role == Role.Admin && model.Role == Role.Admin)
+            switch (admin.Role)
             {
-                if (admin.Role == Role.Admin && model.Role == Role.Admin || admin.Role == Role.Manager && model.Role == Role.Manager)
-                {
-                    var user = await _accountRepository.Select().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
-
-                    user.Role = model.Role;
-                    if (await _accountRepository.Update(user))
+                case Role.Manager:
+                    if (model.Role == Role.Admin || user.Role == Role.Admin || model.Role == Role.Manager || user.Role == Role.Manager)
+                    {
                         return new BaseResponse<AdminPanelAccountViewModel>
                         {
-                            StatusCode = HttpStatusCode.OK,
+                            StatusCode = HttpStatusCode.InternalServerError,
+                            Description = "you don't have enough authority"
                         };
-                }
+                    }
+                    break;
+                case Role.Admin:
+                    if (model.Role == Role.Admin || user.Role == Role.Admin)
+                    {
+                        return new BaseResponse<AdminPanelAccountViewModel>
+                        {
+                            StatusCode = HttpStatusCode.InternalServerError,
+                            Description = "you don't have enough authority"
+                        };
+                    }
+                    break;
+                default:
+                    break;
             }
+            
+            
+            user.Role = model.Role;
+            if (await _accountRepository.Update(user))
+                return new BaseResponse<AdminPanelAccountViewModel>
+                {
+                    StatusCode = HttpStatusCode.OK,
+                };
             return new BaseResponse<AdminPanelAccountViewModel>
             {
                 StatusCode = HttpStatusCode.InternalServerError,
-                Description = "you don't have enough authority"
+                Description = "Server error"
             };
         }
         catch (Exception)
@@ -160,18 +183,6 @@ public class AdminPanelService : IAdminPanelService
         }
     }
 
-    private List<RequestOnChangingRole> GetRequestsOnChangingRoleFromCache()
-    {
-        var cacheOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(30));
-        var requestsFromCache = _memoryCache.GetOrCreate(_requestsOnChangingRoleListKey, entry =>
-        {
-            entry.SetOptions(cacheOptions);
-            return _requestOnChangingRoleRepository.Select().Include(x => x.Account).ToList();
-        });
-        return requestsFromCache;
-    }
-
     private List<AdminPanelAccountViewModel> GetAccountsFromCache()
     {
         var cacheOptions = new MemoryCacheEntryOptions()
@@ -192,5 +203,29 @@ public class AdminPanelService : IAdminPanelService
         return accountsFromCache;
     }
 
-    
+    private List<AdminPanelAccountViewModel> UpdateAccountsInCache()
+    {
+        var cacheOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5));
+        _memoryCache.Remove(_listKey);
+        var accountsFromCache = _memoryCache.GetOrCreate(_listKey, entry =>
+        {
+            entry.SetOptions(cacheOptions);
+            return (from account in _accountRepository.Select()
+                    select new AdminPanelAccountViewModel
+                    {
+                        Id = account.Id,
+                        Email = account.Email,
+                        Login = account.Login,
+                        Role = account.Role,
+                        AccountConfirmed = account.AccountConfirmed
+                    }).ToList();
+        });
+        return accountsFromCache;
+    }
+
+    public Task<BaseResponse<PanelViewModel>> UpdatePanelViewModel(NewFilterOfAccountPanel newFilter)
+    {
+        throw new NotImplementedException();
+    }
 }

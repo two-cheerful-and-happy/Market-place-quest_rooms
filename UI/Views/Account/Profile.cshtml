@@ -1,5 +1,6 @@
 ﻿@using Domain.DTO
 @using Newtonsoft.Json
+@model Domain.ViewModels.Account.ProfileViewModel
 @{
     ViewBag.currentPath = "Account/Profile";
     string avatar = string.Empty;
@@ -76,6 +77,7 @@
         <!--History Location-->
         <section class="clients">
             <h3 class="h3 clients-title">History Of Locations</h3>
+            
             <ul class="clients-list has-scrollbar">
                 <li class="clients-item">
                     <a href="#">

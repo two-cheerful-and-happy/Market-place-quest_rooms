@@ -17,7 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Account> AccountTable { get; set; }
     public DbSet<Photo> PhotoTable { get; set; }
     public DbSet<Comment> CommentTable { get; set; }
-    public DbSet<RequestOnChangingRole> RequestOnChangingRoleTable { get; set; }
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -57,13 +57,13 @@ public class ApplicationDbContext : DbContext
                 .Property(x => x.Address)
                 .HasColumnType("VARCHAR(500)")
                 .HasColumnName("Address")
-                .IsRequired();
+                .IsRequired(false);
 
             buildAction
                 .Property(x => x.PhoneNumber)
                 .HasColumnType("VARCHAR(30)")
                 .HasColumnName("PhoneNumber")
-                .IsRequired();
+                .IsRequired(false);
 
             buildAction
                 .Property(x => x.Birthday)
@@ -101,7 +101,6 @@ public class ApplicationDbContext : DbContext
                     Address = "Dom",
                     Birthday = new DateOnly(2022, 1, 1),
                     PhoneNumber = "+0502689846"
-
                 }); 
         });
 
@@ -150,32 +149,6 @@ public class ApplicationDbContext : DbContext
             buildAction
                 .HasMany(x => x.CommentsOfLocation)
                 .WithMany(x => x.CommentsOfLocation);
-        });
-
-        modelBuilder.Entity<RequestOnChangingRole>(buildAction =>
-        {
-            buildAction
-                .ToTable("RequestOnChangingRoleAccount_Table");
-
-            buildAction
-                .HasKey(x => x.Id)
-                .HasName("index_of_request");
-
-            buildAction
-                .Property(x => x.RequestedRole)
-                .HasColumnType("VARCHAR(20)")
-                .HasColumnName("RequestedRole")
-                .IsRequired();
-
-            buildAction
-                .Property(x => x.DescriptionOrReason)
-                .HasColumnType("TEXT")
-                .HasColumnName("DescriptionOrReason")
-                .IsRequired();
-
-            buildAction
-                .HasOne(x => x.Account)
-                .WithOne(x => x.RequestOnChangingRole);
         });
 
         modelBuilder.Entity<Comment>(buildAction =>

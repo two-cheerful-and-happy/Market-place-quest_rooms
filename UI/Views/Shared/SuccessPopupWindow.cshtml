@@ -1,27 +1,43 @@
 ﻿@model string
 @{
 }
+@{
+}
 
-    <div class="modal" id="successPopupWindow" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                <div class="modal-body">
-                    <div class="text-center alert alert-success" role="alert">
-                        <div class="row justify-content-center">
-                            <h3 style="align-content:center">Success</h3>
-                            <p>
-                                <h4 style="align-content:center">@Model</h4>
-                            </p>        
-                        </div>
-                    </div>
-                </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="~/css/modal.css">
+</head>
+<body>
+    <div id="overlay"></div>
+    <div class="popup">
+        <div class="form-popup">
+            <div class="form-element">
+                <h2>@Model</h2>
+            </div>
+            <div class="form-element">
+                <button onclick="redirectToPage()">Go to Login Page</button>
             </div>
         </div>
     </div>
+    <script>
 
-    <script>           
+        const overlay = document.querySelector("#overlay");
+        const modal = document.querySelector(".popup");
+
         $(document).ready(function () {
-            $('#successPopupWindow').modal('show');
+            overlay.style.display = "block";
+            modal.classList.add("active");
         });
-    </script> 
+
+        function redirectToPage() {
+            window.location.href = '@Url.Action("Panel", "AdminPanel")';
+        }
+    </script>
+</body>
+</html>

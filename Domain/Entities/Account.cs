@@ -16,5 +16,4 @@ public class Account
     public bool AccountConfirmed { get; set; }
     public ICollection<Location> LocationsCreatedByAccount { get; set; }
     public ICollection<Comment> CommentsCreatedByAccount { get; set; }
-    public RequestOnChangingRole RequestOnChangingRole { get; set; }
 }

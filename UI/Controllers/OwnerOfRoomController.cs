@@ -1,7 +1,9 @@
 ﻿using Domain.ViewModels.OwnerOfRoom;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UI.Controllers;
 
+[Authorize(Roles = "OwnerOfRooms")]
 public class OwnerOfRoomController : Controller
 {
     private readonly IMapService _mapService;

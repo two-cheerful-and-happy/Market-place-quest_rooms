@@ -61,7 +61,7 @@
                     <span class="text-danger" asp-validation-for="Registration.Email" data-valmsg-replace="true"></span>
                 </p>
                 <div class="select">
-                <select asp-for="Registration.Role" asp-items="Html.GetEnumSelectList<RoleForRegistrationPage>()" class="form-select">
+                <select asp-for="Registration.Role" asp-items="Html.GetEnumSelectList<RoleForRegistrationPage>()" class="select-login">
                     <option value="Choose">Choose Your Role</option>
                  </select>
                  </div>
