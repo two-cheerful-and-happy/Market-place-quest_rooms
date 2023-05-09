@@ -1,0 +1,17 @@
+﻿@model Domain.ViewModels.Account.ChangeLoginViewModel
+@{
+}
+
+
+            <h2>Change login</h2>
+            <form class="row g-3" asp-action="ChangeLogin" asp-controller="Account" method="post">
+                <input asp-for="Token" hidden>
+                <div class="form-element">
+                    <label asp-for="Login" class="form-label">Login</label>
+                    <input asp-for="Login" type="text" class="form-control">
+                    <span class="text-danger" asp-validation-for="Login" data-valmsg-replace="true"></span>
+                </div>
+                <div class="form-element">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>

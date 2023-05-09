@@ -91,7 +91,9 @@
     color: var(--color);
 }
 
-.popup .form-popup .form-element input[type="email"],
+
+.popup .form-popup .form-element input[type="email"], 
+.popup .form-popup .form-element input[type="password"],
 .popup .form-popup .form-element input[type="text"], select {
     margin-top: 5px;
     display: block;

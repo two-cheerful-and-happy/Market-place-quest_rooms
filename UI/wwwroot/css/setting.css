@@ -1,0 +1,91 @@
+body {
+    background-color: var(--color-2);
+  }
+  
+  :root {
+    --eerie-black-2: hsl(240, 2%, 12%);
+    --onyx: hsl(240, 1%, 17%);
+    --smoky-black: hsl(0, 0%, 7%);
+    --shadow-5: 0 24px 80px hsla(0, 0%, 0%, 0.25);
+    --jet: hsl(0, 0%, 22%);
+    --color: #F7DC6F;
+    --color-2: #D3C9AE;
+    --color-3: #2A0805;
+}
+
+
+  .card {
+    background-color: var(--onyx);
+    width: 600px;
+    height: 400px;
+    border-radius: 18px;
+    margin: 50px auto;
+  }
+  
+  .blue-bg {
+    background-color: var(--color-3);
+    height: 90px;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  
+  .avatar-container {
+    padding-top: 14px;
+    display: flex;
+    margin-top: -40px;
+    margin-left: 20px;
+  }
+  
+  .avatar {
+    background-color: var(--color-2);
+    width: 80px;
+    height: 80px;
+    border-radius: 15px;
+    margin-right: 20px;
+    box-shadow: 0 0 1px 7px var(--onyx);
+  }
+
+  .nickname {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    color: var(--color);
+    padding-top: 20px;
+    font-size: 18px;
+  }
+  
+  .info-container {
+    margin: 10px;
+    padding: 30px;
+    background-color: var(--eerie-black-2);
+    margin-top: 20px;
+    border-radius: 10px;
+  }
+  
+  .info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .info-label {
+    color: var(--color);
+    flex-basis: 100px;
+  }
+  
+  .edit-button {
+    background-color: var(--color);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  
+  .edit-button:hover {
+    background-color: #ddd;
+  }
+
+  .info-value {
+    color: var(--color);
+  }

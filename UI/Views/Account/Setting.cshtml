@@ -1,0 +1,85 @@
+﻿@using Domain.DTO;
+@using Newtonsoft.Json
+@model Domain.ViewModels.Account.SettingViewModel
+@{
+    ViewBag.currentPath = "Account/Setting";
+    string avatar = string.Empty;
+    if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+        avatar = "admin-logo.png";
+    else if (User.IsInRole("OwnerOfRooms"))
+        avatar = "owner-logo.png";
+    else if (User.IsInRole("User"))
+        avatar = "users-logo.png";
+
+    AccountCookieData userCookie = new();
+    if (User.Identity.IsAuthenticated)
+    {
+        var userCookieJson = Context.Request.Cookies["UserCookie"];
+        userCookie = JsonConvert.DeserializeObject<AccountCookieData>(userCookieJson);
+    }
+}
+<div class="card">
+        <div class="blue-bg"></div>
+        <div class="avatar-container">
+            <div class="avatar"><img src="~/img/@avatar" alt="" class="avatar"></div>
+          <div class="nickname">@userCookie.Login</div>
+        </div>
+        <div class="info-container">
+        <div class="info-row">
+            <div class="info-label">Username:</div>
+            <div class="info-value"> @userCookie.Login</div>
+            <button class="edit-button" onclick="openModalChangePassword({ url: '@Url.Action("ChangeLogin", "Account")' , data: '@userCookie.Login'})">Edit</button>
+          </div>
+        <div class="info-row">
+            <div class="info-label">Email:</div>
+            <div class="info-value"> @userCookie.Email</div>
+            <button class="edit-button" onclick="openRequestToCahngeEmail({ url: '@Url.Action("ModalRequestToChangeEmail", "Account")'})">Edit</button>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Phone:</div>
+            <div class="info-value"> @userCookie.PhoneNumber</div>
+            <button class="edit-button" onclick="openRequestToCahngeEmail({ url: '@Url.Action("ModalRequestToChangePhone", "Account")'})">Edit</button>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Password:</div>
+            <div class="info-value">********</div>
+            <button class="edit-button" onclick="openModalChangePassword({ url: '@Url.Action("ChangePasswordInAccount", "Account")', data: '@userCookie.Login'})">Edit</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function openErrorLog(parameters) {
+        axios.get(parameters.url + '?code=' + parameters.error)
+            .then(function (response) {
+                const modalLog = document.querySelector(".popup");
+                const modalBody = modalLog.querySelector(".modal-body");
+                modalBody.innerHTML = response.data;
+                overlay.style.display = "block";
+                modal.classList.add("active");
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const errorLogin = '@Model.LoginError';
+    const errorPass = '@Model.PasswordError';
+    
+    
+
+
+    if (errorLogin !== null && errorLogin !== undefined) {
+        var parametersLogin = {
+            error: errorLogin, // значение идентификатора
+            url: '@Url.Action("ChangeLoginError", "Account")' // адрес URL
+        };
+        openErrorLog(parametersLogin);
+    }
+    else if (errorPass !== null && errorPass !== undefined) {
+        var parametersPass = {
+            error: errorPass, // значение идентификатора
+            url: '@Url.Action("ChangePasswordError", "Account")' // адрес URL
+        };
+        openErrorLog(parametersPass);
+    }
+</script>

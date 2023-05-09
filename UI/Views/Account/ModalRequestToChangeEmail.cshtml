@@ -1,0 +1,25 @@
+﻿@model Domain.ViewModels.Account.FormEmailViewModel
+@{
+}
+
+
+
+        <div class="close-popup-email" onclick="closeModal()">&times;</div>
+        <img src="~/img/email.png" alt="email" />
+        <h2>Verify email addres</h2>
+        <p class="text-up">
+          We'll need to verify you ald email address,
+            <span>@Model.Email</span> in order to change it.
+        </p>
+
+        <p>
+            Lost access to your email? Please contact your email
+            provider to regain access.
+        </p>
+        <form asp-action="SendRequestToChangeEmail" asp-controller="Account" method="post">
+            <input asp-for="Email" value="@Model.Email" hidden/>
+            <button type="submit">Send Verification Code</button>
+            <a asp-controller="Account" asp-action="Setting">Cancel</a>
+        </form>
+        
+    
