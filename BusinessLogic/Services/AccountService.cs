@@ -365,20 +365,21 @@ public class AccountService : IAccountService
                 };
             var user = await _accountRepository.Select().Where(x => x.Login == model.Token).FirstOrDefaultAsync();
             user.Login = model.Login;
+
             await _accountRepository.Update(user);
             return new BaseResponse<AccountCookieData>
-            {
-                Data = new AccountCookieData
                 {
-                    Address = user.Address,
-                    Birthday = user.Birthday,
-                    Email = user.Email,
-                    Login = user.Login,
-                    PhoneNumber = user.PhoneNumber,
-                    Role = user.Role
-                },
-                StatusCode = HttpStatusCode.OK
-            };
+                    Data = new AccountCookieData
+                    {
+                        Address = user.Address,
+                        Birthday = user.Birthday,
+                        Email = user.Email,
+                        Login = user.Login,
+                        PhoneNumber = user.PhoneNumber,
+                        Role = user.Role
+                    },
+                    StatusCode = HttpStatusCode.OK
+                };
         }
         catch (Exception)
         {

@@ -78,6 +78,7 @@ public class AccountController : Controller
         {
             Token = code
         };
+        Thread.Sleep(100);
         ModelState.AddModelError("Login", code);
         return PartialView("ChangeLogin", result);
     }
@@ -89,6 +90,7 @@ public class AccountController : Controller
         {
             Token = code
         };
+        Thread.Sleep(100);
         ModelState.AddModelError("All", code);
 
         return PartialView("ChangePasswordInAccount", result);
