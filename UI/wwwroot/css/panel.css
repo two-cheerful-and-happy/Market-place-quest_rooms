@@ -10,10 +10,18 @@
   font-family: "Poppins", sans-serif;
 }
 body{
-  background: #D3C9AE;
+  background: var(--oxford-blue);
 }
 
 :root {
+    --oxford-blue-dark: hsl(217, 74%, 11%);
+    --oxford-blue: hsl(217, 54%, 11%);
+    --light-oxford-blue: hsl(216, 50%, 16%);
+    --indigo-dye: hsl(215, 32%, 27%);
+    --blue-yonder: hsl(216, 20%, 55%);
+    --aqua: hsla(178, 100%, 50%, 0.4);
+    --white: hsl(0, 0%, 100%);
+    --aqua-2: hsla(178, 100%, 50, 0.5);
     --eerie-black-2: hsl(240, 2%, 12%);
     --onyx: hsl(240, 1%, 17%);
     --smoky-black: hsl(0, 0%, 7%);
@@ -45,18 +53,18 @@ body{
 }
 
 h1 {
-    color: var(--color);
+    color: var(--aqua);
 }
 
 .not-active {
-    color: var(--color-2);
+    color: var(--white);
 }
 
 .attendance-list{
   width: 100%;
   padding: 10px;
   margin-top: 10px;
-  background: var(--eerie-black-2);
+  background: var(--light-oxford-blue);
   border-radius: 10px;
   box-shadow: 0 20px 35px var(--shadow-5);
 }
@@ -69,8 +77,8 @@ h1 {
   border-radius: 5px 5px 0 0;
 }
 table thead tr{
-  color: var(--smoky-black);
-  background: var(--color);
+  color: var(--aqua);
+  background: var(--oxford-blue-dark);
   text-align: left;
   font-weight: bold;
 }
@@ -79,39 +87,39 @@ table thead tr{
   padding: 12px 15px;
 }
 .table tbody tr{
-  border-bottom: 1px solid var(--color);
+  border-bottom: 1px solid var(--aqua);
 }
 .table tbody tr:nth-of-type(odd){
-  background: var(--onyx);
+  background: var(--indigo-dye);
 }
 .table tbody tr.active{
   font-weight: bold;
-  color: var(--color);
+  color: var(--aqua);
 }
 .table tbody tr:last-of-type{
-  border-bottom: 2px solid var(--color);
+  border-bottom: 2px solid var(--aqua);
 }
 .table button{
   padding: 6px 20px;
   border-radius: 10px;
   cursor: pointer;
   background: transparent;
-  color: var(--color-2);
-  border: 1px solid var(--color);
+  color: var(--blue-yonder);
+  border: 1px solid var(--blue-yonder);
 }
 .table button:hover{
-  background: var(--color);
-  color: var(--smoky-black);
-  transition: 0.5rem;
+  background: var(--oxford-blue-dark);
+  transition: 0.2rem;
+  color: var(--white);
 }
 
 .under-table {
     position: relative;
-    background-color: var(--onyx);
+    background-color: var(--light-oxford-blue);
     margin-top: 20px;
     padding: 6px 20px;
     border-radius: 10px;
-    color: var(--color-2);
+    color: var(--aqua);
 }
 
 .under-btn-1 {
@@ -119,8 +127,8 @@ table thead tr{
     border-radius: 10px;
     cursor: pointer;
     background: transparent;
-    color: var(--color);
-    border: 1px solid var(--color);
+    color: var(--aqua);
+    border: 1px solid var(--blue-yonder);
 }
 
 .under-btn-2 {
@@ -129,16 +137,16 @@ table thead tr{
     border-radius: 10px;
     cursor: pointer;
     background: transparent;
-    color: var(--color);
-    border: 1px solid var(--color);
+    color: var(--aqua);
+    border: 1px solid var(--blue-yonder);
     right: 0;
     margin-right: 15px;
 }
 
 button:hover {
-    background: var(--color);
-    color: var(--smoky-black);
-    transition: .7s;
+    background: var(--indigo-dye);
+    color: var(--white);
+    transition: .3s;
 }
 
 .data {
@@ -147,8 +155,8 @@ button:hover {
     border-radius: 10px;
     cursor: pointer;
     background: transparent;
-    color: var(--color);
-    border: 1px solid var(--color);
+    color: var(--aqua);
+    border: 1px solid var(--blue-yonder);
     right: 0;
     margin-right: 15px;
     top: 200px;
@@ -157,12 +165,12 @@ button:hover {
 
 .upper-table {
     position: relative;
-    background-color: var(--onyx);
+    background-color: var(--light-oxford-blue);
     margin-top: 20px;
     padding: 6px 20px;
     border-radius: 10px;
-    color: var(--color-2);
-    border: 1px solid var(--color);
+    color: var(--aqua);
+    border: 1px solid var(--blue-yonder);
 }
 
 .upper-btn-1 {
@@ -170,8 +178,8 @@ button:hover {
     padding: 6px 15%;
     border-radius: 10px;
     background: transparent;
-    color: var(--color);
-    border: 1px solid var(--color);
+    color: var(--aqua);
+    border: 1px solid var(--blue-yonder);
 }
 
 .upper-btn-2 {
@@ -179,19 +187,18 @@ button:hover {
     border-radius: 10px;
     cursor: pointer;
     background: transparent;
-    color: var(--color);
-    border: 1px solid var(--color);
+    color: var(--aqua);
+    border: 1px solid var(--blue-yonder);
     right: 0;
     margin-right: 15px;
 }
 
 .sub-btn {
     position: relative;
-    background-color: var(--onyx);
+    background-color: var(--light-oxford-blue);
     margin-top: 20px;
     padding: 15px 20px;
     border-radius: 10px;
-    color: var(--color-2);
 }
 
 .sub-btn-1 {
@@ -200,17 +207,18 @@ button:hover {
     border-radius: 10px;
     cursor: pointer;
     background: transparent;
-    color: var(--color);
-    border: 1px solid var(--color);
+    color: var(--aqua);
+    border: 1px solid var(--blue-yonder);
     top: -10px;
     right: 0;
 }
 
 input::placeholder {
-    color: var(--color-3);
+    color: var(--indigo-dye);
 }
 
 option {
-    background-color: var(--onyx);
-    text-align-last:     center;
+    background-color: var(--indigo-dye);
+    color: var(--aqua);
+    text-align-last: center;
 }

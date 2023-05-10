@@ -4,18 +4,24 @@
     box-sizing: border-box;
 }
 
-.frame {
+body {
     background: #D3C9AE;
 }
 
 :root {
+    --oxford-blue: hsl(217, 54%, 11%);
+    --light-oxford-blue: hsl(216, 50%, 16%);
+    --indigo-dye: hsl(215, 32%, 27%);
+    --blue-yonder: hsl(216, 20%, 55%);
+    --aqua: hsla(178, 100%, 50%, 0.4);
+    --white: hsl(0, 0%, 100%);
+    --aqua-2: hsla(178, 100%, 50, 0.5);
     --eerie-black-2: hsl(240, 2%, 12%);
     --onyx: hsl(240, 1%, 17%);
     --smoky-black: hsl(0, 0%, 7%);
     --shadow-5: 0 24px 80px hsla(0, 0%, 0%, 0.25);
     --jet: hsl(0, 0%, 22%);
     --color: #F7DC6F;
-    --color-3: rgba(247, 220, 111, .5);
 }
 
 .center {
@@ -44,7 +50,7 @@
     opacity: 0;
     transform: translate(-50%, -50%);
     width: 50%;
-    background: var(--eerie-black-2);
+    background: var(--oxford-blue);
     padding: 15px;
     margin: 15px 12px;
     border: 1px solid var(--jet);
@@ -66,8 +72,8 @@
     right: 18px;
     height: 25px;
     width: 25px;
-    background: var(--onyx);
-    color: var(--color);
+    background: var(--light-oxford-blue);
+    color: var(--blue-yonder);
     text-align: center;
     line-height: 25px;
     border-radius: 11px;
@@ -77,7 +83,7 @@
 
 .popup .form-popup h2 {
     text-align: center;
-    color: var(--color);
+    color: var(--aqua);
     margin: 10px 0 20px;
     font-size: 25px;
 }
@@ -88,23 +94,21 @@
 
 .popup .form-popup .form-element label {
     font-size: 14px;
-    color: var(--color);
+    color: var(--blue-yonder);
 }
 
-
-.popup .form-popup .form-element input[type="email"], 
+.popup .form-popup .form-element input[type="email"],
 .popup .form-popup .form-element input[type="password"],
 .popup .form-popup .form-element input[type="text"], select {
-    margin-top: 5px;
-    display: block;
-    width: 100%;
-    padding: 10px;
-    outline: none;
-    border: 1px solid var(--color);
-    border-radius: 5px;
-    color: var(--color);
-    background-color: var(--onyx)
-}
+        margin-top: 5px;
+        display: block;
+        width: 100%;
+        padding: 10px;
+        outline: none;
+        border: 1px solid var(--aqua);
+        border-radius: 5px;
+        background-color: var(--light-oxford-blue);
+    }
 
 .popup .form-popup .form-element button {
     width: 100%;
@@ -112,14 +116,14 @@
     border: none;
     outline: none;
     font-size: 15px;
-    background: var(--smoky-black);
-    color: var(--color);
+    background: var(--light-oxford-blue);
+    color: var(--aqua);
     border-radius: 10px;
     cursor: pointer;
 }
 
 select, input::placeholder {
-    color: var(--color);
+    color: var(--blue-yonder);
 }
 
 #overlay {
@@ -133,7 +137,8 @@ select, input::placeholder {
     display: none;
 }
 
-input::placeholder{
+
+input::placeholder {
     color: var(--color-3);
 }
 
