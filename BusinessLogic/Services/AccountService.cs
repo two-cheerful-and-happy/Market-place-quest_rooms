@@ -157,6 +157,7 @@ public class AccountService : IAccountService
         try
         {
             var account = await _accountRepository.Select()
+                .Where(x => x.Login == login)
                 .Include(x => x.CommentsCreatedByAccount)
                 .Include(x => x.LocationsCreatedByAccount)
                 .FirstOrDefaultAsync();
@@ -407,7 +408,7 @@ public class AccountService : IAccountService
                         return new BaseResponse<ValidationResult>
                         {
                             StatusCode = HttpStatusCode.OK,
-                        };
+                        };  
                 }
                     
             }
