@@ -38,7 +38,7 @@
         <div class="info-row">
             <div class="info-label">Phone:</div>
             <div class="info-value"> @userCookie.PhoneNumber</div>
-            <button class="edit-button" onclick="openRequestToCahngeEmail({ url: '@Url.Action("ModalRequestToChangePhone", "Account")'})">Edit</button>
+            <button class="edit-button" onclick="openRequestToCahngeModal({ url: '@Url.Action("ChangePhone", "Account")'})">Edit</button>
         </div>
         <div class="info-row">
             <div class="info-label">Password:</div>
@@ -48,6 +48,8 @@
     </div>
 </div>
 <script type="text/javascript">
+
+
     function openErrorLog(parameters) {
         axios.get(parameters.url + '?code=' + parameters.error)
             .then(function (response) {
@@ -62,24 +64,27 @@
             });
     }
 
-    const errorLogin = '@Model.LoginError';
-    const errorPass = '@Model.PasswordError';
-    
-    
 
+    var errorLogin = '@Model.LoginError';
+    var errorPass = '@Model.PasswordError';
 
-    if (errorLogin !== null && errorLogin !== undefined) {
-        var parametersLogin = {
-            error: errorLogin, // значение идентификатора
-            url: '@Url.Action("ChangeLoginError", "Account")' // адрес URL
-        };
-        openErrorLog(parametersLogin);
-    }
-    else if (errorPass !== null && errorPass !== undefined) {
+    if (errorPass !== '') {
         var parametersPass = {
             error: errorPass, // значение идентификатора
             url: '@Url.Action("ChangePasswordError", "Account")' // адрес URL
         };
         openErrorLog(parametersPass);
+        errorPass = '';
     }
+    if (errorLogin !== '') {
+        var parametersLogin = {
+            error: errorLogin, // значение идентификатора
+            url: '@Url.Action("ChangeLoginError", "Account")' // адрес URL
+        };
+        openErrorLog(parametersLogin);
+        errorLogin = '';
+    }
+    
+
+
 </script>

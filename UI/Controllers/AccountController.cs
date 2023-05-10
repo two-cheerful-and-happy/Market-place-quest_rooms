@@ -122,6 +122,12 @@ public class AccountController : Controller
             Token = code
         };
         return PartialView(result);
+    }
+
+    [HttpGet]
+    public IActionResult ChangePhone()
+    {
+        return PartialView();
 
     }
 

@@ -402,10 +402,14 @@ public class AccountService : IAccountService
             if(model.NewPassword == model.NewPasswordConfirm && HashPasswordHelper.HashPassowrd(model.NewPassword) != user.Password)
             {
                 if(ChangePassword(ref user, model.NewPassword))
-                    return new BaseResponse<ValidationResult>
-                    {
-                        StatusCode = HttpStatusCode.OK,
-                    };
+                {
+                    if(await _accountRepository.Update(user))
+                        return new BaseResponse<ValidationResult>
+                        {
+                            StatusCode = HttpStatusCode.OK,
+                        };
+                }
+                    
             }
             
             return new BaseResponse<ValidationResult>

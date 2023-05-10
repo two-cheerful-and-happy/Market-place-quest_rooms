@@ -377,6 +377,15 @@ body {
 
 #map {
     height: 100vh;
-    width: 100%;
+    width: 100%;   
+}
+
+
+a header{
+    cursor: default;
     
+}
+
+.wrapper a{
+    text-decoration: none;
 }
