@@ -62,6 +62,8 @@ function updateDataOfTable(parameters) {
 
     axios.get(parameters.url)
         .then(function (response) {
+            window.location.href = response.data;
+            window.location.href = parameters.url;
         })
         .catch(function (error) {
             console.log(error);

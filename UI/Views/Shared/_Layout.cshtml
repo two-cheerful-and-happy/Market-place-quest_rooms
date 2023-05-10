@@ -46,6 +46,9 @@
         case "AdminPanel/Panel":
             <link rel="stylesheet" href="~/css/panel.css" />
             break;
+        case "AdminPanel/ConfirmLocation":
+            <link rel="stylesheet" href="~/css/panel.css" />
+            break;
         case "Account/Login":
             <link rel="stylesheet" href="~/css/login.css">
             <script src="~/js/login.js" defer></script>
@@ -56,12 +59,13 @@
             break;
         case "Map/Index":
             <link rel="stylesheet" href="~/css/map.css">
-            <script src="~/js/map.js" defer></script>
-            <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC46HqGIWfYeMj59WLvcHXjuGLXgOX3fr0&callback=initMap&v=weekly" defer></script>
             break;
         case "Account/Setting":
             <link rel="stylesheet" href="~/css/email.css">
             <link rel="stylesheet" href="~/css/setting.css">
+            break;
+        case "Owner/AddLocation":
+            <link rel="stylesheet" href="~/css/addlocation.css">
             break;
         default:
             break;
@@ -104,7 +108,7 @@
                     <ul class="sub-menu">
                         <li><a class="link_name" href="#">Admin</a></li>
                         <li><a asp-action="Panel" asp-controller="AdminPanel">Admin Panel</a></li>
-                        <li><a href="#">Confirming Location</a></li>
+                        <li><a asp-action="LocationConfirmPanel" asp-controller="AdminPanel">Location Panel</a></li>
                     </ul>
                 </li>
             }
@@ -120,31 +124,13 @@
                     </div>
                     <ul class="sub-menu">
                         <li><a class="link_name">Owner Of Quest Room</a></li>
-                        <li><a href="#">Created New Location</a></li>
+                        <li><a asp-action="AddNewLocation" asp-controller="OwnerOfRoom">Created New Location</a></li>
                         <li><a href="#">Location Of Owner</a></li>
                     </ul>
                 </li>
             }
             @if (User.Identity.IsAuthenticated)
             {
-                <li>
-                    <a href="#">
-                        <i class='bx bx-history'></i>
-                        <span class="link_name">History Location</span>
-                    </a>
-                    <ul class="sub-menu blank">
-                        <li><a class="link_name" href="#">History Location</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">
-                        <i class='bx bx-chat'></i>
-                        <span class="link_name">Comments</span>
-                    </a>
-                    <ul class="sub-menu blank">
-                        <li><a class="link_name" href="#">Comments</a></li>
-                    </ul>
-                </li>
                 <li>
                     <div class="iocn-link">
                         <a asp-action="Profile" asp-controller="Account">
@@ -238,6 +224,15 @@
 
     </footer>
     
-    
+    @if (ViewBag.currentPath == "Map/Index")
+    {
+        <script src="~/js/map.js"></script>
+        <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC46HqGIWfYeMj59WLvcHXjuGLXgOX3fr0&callback=initMap&v=weekly"></script>
+    }
+    else if (ViewBag.currentPath == "Owner/AddLocation")
+    {
+        <script src="~/js/map-add-location.js"></script>
+        <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC46HqGIWfYeMj59WLvcHXjuGLXgOX3fr0&callback=initMap&v=weekly"></script>
+    }
 </body>
 </html>

@@ -159,8 +159,15 @@ button:hover {
     border: 1px solid var(--blue-yonder);
     right: 0;
     margin-right: 15px;
-    top: 200px;
     right: 16px;
+}
+
+.einzug {
+    top: 200px;
+}
+
+.einzug-2 {
+    top: 230px;
 }
 
 .upper-table {

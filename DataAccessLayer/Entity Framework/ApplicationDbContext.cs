@@ -15,7 +15,6 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Location> LocationTable { get; set; }
     public DbSet<Account> AccountTable { get; set; }
-    public DbSet<Photo> PhotoTable { get; set; }
     public DbSet<Comment> CommentTable { get; set; }
     
 
@@ -134,6 +133,12 @@ public class ApplicationDbContext : DbContext
                 .HasColumnType("BIT");
 
             buildAction
+                .Property(x => x.Photo)
+                .HasColumnType("VARBINARY(MAX)")
+                .HasColumnName("Photo")
+                .IsRequired();
+
+            buildAction
                 .Property(x => x.Latitude)
                 .HasColumnType("float")
                 .HasColumnName("Latitude");
@@ -169,24 +174,6 @@ public class ApplicationDbContext : DbContext
                 .HasColumnName("Mark");
         });
 
-        modelBuilder.Entity<Photo>(buildAction =>
-        {
-            buildAction.
-                ToTable("Photo_Table");
-
-            buildAction
-                .HasKey(x => x.Id)
-                .HasName("Index_of_Location_of_user");
-
-            buildAction
-                .Property(x => x.Value)
-                .HasColumnType("VARBINARY(MAX)")
-                .HasColumnName("Value")
-                .IsRequired();
-
-            buildAction
-                .HasOne(x => x.LocationId)
-                .WithMany(x => x.Photos);
-        });
+        
     }
 }

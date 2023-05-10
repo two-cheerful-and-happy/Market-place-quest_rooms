@@ -1,5 +1,7 @@
-﻿using Domain.ViewModels.OwnerOfRoom;
+﻿using Domain.DTO;
+using Domain.ViewModels.OwnerOfRoom;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace UI.Controllers;
 
@@ -20,12 +22,22 @@ public class OwnerOfRoomController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddNewLocation(AddNewLocationViewModel model)
+    public async Task<IActionResult> CreateLocation(AddNewLocationViewModel model)
     {
         if(ModelState.IsValid) 
         {
-            //await _mapService.AddNewLocationAsync();
+            var userCookieJson = Request.Cookies["UserCookie"];
+            var userCookie = JsonConvert.DeserializeObject<AccountCookieData>(userCookieJson);
+            model.Login = userCookie.Login;
+            var response = await _mapService.AddNewLocationAsync(model);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                return PartialView(
+                "PopupWindow",
+                $"Location was created, you have to wait when your location will be confirmed");
+
+            foreach (var item in response.Data.MemberNames)
+                ModelState.AddModelError(item, response.Data.ErrorMessage);
         }
-        return View();
+        return View("AddNewLocation", model);
     }
 }

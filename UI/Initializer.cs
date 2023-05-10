@@ -8,7 +8,6 @@ public static class Initializer
     {
         services.AddScoped<IBaseRepository<Location>, LocationRepository>();
         services.AddScoped<IBaseRepository<Account>, AccountRepository>();
-        services.AddScoped<IBaseRepository<Photo>, PhotoRepository>();
         services.AddScoped<IBaseRepository<Comment>, CommentRepository>();
     }
 

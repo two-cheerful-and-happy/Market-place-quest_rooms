@@ -40,7 +40,7 @@ public class MapController : Controller
             Latitude = 48.837930,
             Longitude = 27.107993
         };
-        _mapService.AddNewLocationAsync(a);
+        
         return View();
     }
 
