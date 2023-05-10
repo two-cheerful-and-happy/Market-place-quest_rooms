@@ -15,4 +15,7 @@ public interface IAccountService
     public Task<BaseResponse<ClaimsIdentity>> LoginAsync(LoginViewModel model);
     public Task<List<Account>> SelectAccountsAsync();
     public AccountCookieData GetCookieAccountByLogin(string login);
+    public Task<BaseResponse<AccountCookieData>> ChangeEmailAsync(ChangeEmailViewModel model);
+    public Task<BaseResponse<AccountCookieData>> ChangeLoginAsync(ChangeLoginViewModel model);
+    public Task<BaseResponse<ValidationResult>> ChangePasswordAsync(ChangePasswordViewModel model);
 }

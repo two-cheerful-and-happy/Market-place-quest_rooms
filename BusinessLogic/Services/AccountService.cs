@@ -1,4 +1,6 @@
 ﻿using Domain.DTO;
+using Domain.Entities;
+using System.ComponentModel;
 
 namespace BusinessLogic.Services;
 
@@ -85,11 +87,6 @@ public class AccountService : IAccountService
                     {
                         StatusCode = HttpStatusCode.OK
                     };
-                return new BaseResponse<ValidationResult>
-                {
-                    StatusCode = HttpStatusCode.InternalServerError,
-                    Data = new ValidationResult("The password must not contain Cyrillic characters.", new List<string> { "Password" })
-                };
             }
             return new BaseResponse<ValidationResult>
             {
@@ -254,6 +251,180 @@ public class AccountService : IAccountService
         }
     }
 
+    public async Task<List<Account>> SelectAccountsAsync()
+    {
+        try
+        {
+            var result = await _accountRepository.Select().ToListAsync();
+            return result;
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+    public async Task<BaseResponse<Account>> GetAccountByIdAsync(int id)
+    {
+        try
+        {
+            var user = await _accountRepository.Select().Where(x => x.Id == id).FirstOrDefaultAsync();
+            return new BaseResponse<Account>
+            {
+                StatusCode = HttpStatusCode.OK,
+                Data = user
+            };
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public AccountCookieData GetCookieAccountByLogin(string login)
+    {
+        try
+        {
+            var user = (from p in _accountRepository.Select()
+                        where p.Login == login
+                        select new AccountCookieData
+                        {
+                            Login = p.Login,
+                            Address = p.Address,
+                            Birthday = p.Birthday,
+                            Email = p.Email,
+                            PhoneNumber = p.PhoneNumber,
+                            Role = p.Role
+                        }).FirstOrDefault();
+            return user;
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public async Task<BaseResponse<AccountCookieData>> ChangeEmailAsync(ChangeEmailViewModel model)
+    {
+        try
+        {
+            var user = await _accountRepository.Select().Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+            var existEmail = await _accountRepository.Select().Where(x => x.Email == model.Email).FirstOrDefaultAsync();
+
+            if (user is null)
+                return new BaseResponse<AccountCookieData> { StatusCode = HttpStatusCode.BadRequest, Description = "User dose not exist" };
+            if (existEmail != null)
+                return new BaseResponse<AccountCookieData> { StatusCode = HttpStatusCode.BadRequest, Description = "Email have already used" };
+            if (HashPasswordHelper.HashPassowrd(user.Login) == model.Token)
+            {
+                user.Email = model.Email;
+                user.AccountConfirmed = false;
+                if (await _accountRepository.Update(user))
+                {
+                    var result = new AccountCookieData
+                    {
+                        Address = user.Address,
+                        Birthday = user.Birthday,
+                        Email = user.Email,
+                        Login = user.Login,
+                        PhoneNumber = user.PhoneNumber,
+                        Role = user.Role
+                    };
+                    return new BaseResponse<AccountCookieData>
+                    {
+                        StatusCode = HttpStatusCode.OK,
+                        Data = result
+                    };
+                }
+            }
+            return new BaseResponse<AccountCookieData> { StatusCode = HttpStatusCode.BadRequest, Description = "Token is wrong" };
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public async Task<BaseResponse<AccountCookieData>> ChangeLoginAsync(ChangeLoginViewModel model)
+    {
+        try
+        {
+            if(model.Token == model.Login)
+                return new BaseResponse<AccountCookieData>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Description = "Login is same."
+                };
+            var existEmail = await _accountRepository.Select().Where(x => x.Login == model.Login).FirstOrDefaultAsync();
+            if (existEmail != null)
+                return new BaseResponse<AccountCookieData>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Description = "Login have already used."
+                };
+            var user = await _accountRepository.Select().Where(x => x.Login == model.Token).FirstOrDefaultAsync();
+            user.Login = model.Login;
+
+            await _accountRepository.Update(user);
+            return new BaseResponse<AccountCookieData>
+                {
+                    Data = new AccountCookieData
+                    {
+                        Address = user.Address,
+                        Birthday = user.Birthday,
+                        Email = user.Email,
+                        Login = user.Login,
+                        PhoneNumber = user.PhoneNumber,
+                        Role = user.Role
+                    },
+                    StatusCode = HttpStatusCode.OK
+                };
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    public async Task<BaseResponse<ValidationResult>> ChangePasswordAsync(ChangePasswordViewModel model)
+    {
+        try
+        {
+            var user = await _accountRepository.Select().Where(x => x.Login == model.Token).FirstOrDefaultAsync();
+            if (HashPasswordHelper.HashPassowrd(model.CurrentPassword) != user.Password)
+                return new BaseResponse<ValidationResult>
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Data = new ValidationResult("The password is wrong.", new List<string> { "CurrentPassword" })
+                };
+            if(model.NewPassword == model.NewPasswordConfirm && HashPasswordHelper.HashPassowrd(model.NewPassword) != user.Password)
+            {
+                if(ChangePassword(ref user, model.NewPassword))
+                {
+                    if(await _accountRepository.Update(user))
+                        return new BaseResponse<ValidationResult>
+                        {
+                            StatusCode = HttpStatusCode.OK,
+                        };
+                }
+                    
+            }
+            
+            return new BaseResponse<ValidationResult>
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Data = new ValidationResult("The password must not contain Cyrillic characters. Or new password is same", new List<string> { "NewPassword" })
+            };
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
     private bool MaskPassword(string password)
     {
         bool onlyEn = true; // variable to check for only en key
@@ -279,58 +450,14 @@ public class AccountService : IAccountService
             ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
     }
 
-    public async Task<List<Account>> SelectAccountsAsync()
+    private bool ChangePassword(ref Account account,string password)
     {
-        try
+        if (MaskPassword(password))
         {
-            var result = await _accountRepository.Select().ToListAsync();
-            return result;
+            account.Password = password;
+            return true;
         }
-        catch (Exception)
-        {
 
-            throw;
-        }
-    }
-
-    public async Task<BaseResponse<Account>> GetAccountByIdAsync(int id)
-    {
-        try
-        {
-            var user = await _accountRepository.Select().Where(x => x.Id == id).FirstOrDefaultAsync();
-            return new BaseResponse<Account>
-            {
-                StatusCode = HttpStatusCode.OK,
-                Data = user
-            };
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-
-    public AccountCookieData GetCookieAccountByLogin(string login)
-    {
-        try
-        {
-            var user = (from p in _accountRepository.Select()
-                       where p.Login == login
-                       select new AccountCookieData 
-                       {
-                           Login = p.Login,
-                           Address = p.Address,
-                           Birthday = p.Birthday,
-                           Email = p.Email,
-                           PhoneNumber = p.PhoneNumber,
-                           Role = p.Role
-                       }).FirstOrDefault();
-            return user;
-        }
-        catch (Exception)
-        {
-
-            throw;
-        }
+        return false;
     }
 }

@@ -19,24 +19,26 @@
 <body>
     <div class="wrapper">
         <div class="container">
-            <header class="main-header">
-                <div class="layers">
-                    <div class="layer__header">
-                        <div class="leyers__caption">Welcome to the darkness where</div>
-                        <div class="layers__title">Nightmares</div>
-                        <div class="scroll">Scroll down the page if you dare</div>
+            <a asp-action="Index" asp-controller="Map">
+                <header class="main-header">
+                    <div class="layers">
+                        <div class="layer__header">
+                            <div class="leyers__caption">Welcome to the darkness where</div>
+                            <div class="layers__title">Nightmares</div>
+                            <div class="scroll">Scroll down the page if you dare</div>
+                        </div>
+                        <div class="layer layers__base"
+                             style="background-image: url(../../img/layer-base.png)">
+                        </div>
+                        <div class="layer layers__middle"
+                             style="background-image: url(../../img/layer-middle.png)">
+                        </div>
+                        <div class="layer layers__front"
+                             style="background-image: url(../../img/layer-front.png)">
+                        </div>
                     </div>
-                    <div class="layer layers__base"
-                         style="background-image: url(../../img/layer-base.png)">
-                    </div>
-                    <div class="layer layers__middle"
-                         style="background-image: url(../../img/layer-middle.png)">
-                    </div>
-                    <div class="layer layers__front"
-                         style="background-image: url(../../img/layer-front.png)">
-                    </div>
-                </div>
-            </header>
+                </header>
+            </a>
             <article class="main-article">
                 <a  class="layer layer__link" id="modalButton1">
                     <div class="layer layer__back"

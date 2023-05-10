@@ -31,9 +31,6 @@ public class ApplicationDbContext : DbContext
                 .HasName("Index_of_account");
 
             buildAction
-                .HasAlternateKey(x => x.Login);
-
-            buildAction
                 .Property(x => x.Email)
                 .HasColumnType("VARCHAR(50)")
                 .HasColumnName("Email")

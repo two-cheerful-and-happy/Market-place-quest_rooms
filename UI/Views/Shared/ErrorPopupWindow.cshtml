@@ -19,7 +19,7 @@
                 <h2>@Model</h2>
             </div>
             <div class="form-element">
-                <button onclick="redirectToPage()">Go to Login Page</button>
+                <button onclick="redirectToPage()">Go to main page</button>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
         });
 
         function redirectToPage() {
-            window.location.href = '@Url.Action("Panel", "AdminPanel")';
+            window.location.href = '@Url.Action("Index", "Map")';
         }
     </script>
 </body>
