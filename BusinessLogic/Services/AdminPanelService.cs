@@ -10,7 +10,6 @@ public class AdminPanelService : IAdminPanelService
 {
     private readonly IBaseRepository<Account> _accountRepository;
     private readonly IBaseRepository<Location> _locationRepository;
-
     private readonly IMemoryCache _memoryCache;
     private const string _listLocationsKey = "LocationsListKey";
     private const string _listKey = "AccountsListKey";
@@ -306,7 +305,7 @@ public class AdminPanelService : IAdminPanelService
     private List<AdminPanelAccountViewModel> GetAccountsFromCache()
     {
         var cacheOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(30));
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5));
         var accountsFromCache = _memoryCache.GetOrCreate(_listKey, entry =>
         {
             entry.SetOptions(cacheOptions);
@@ -326,7 +325,7 @@ public class AdminPanelService : IAdminPanelService
     private List<AdminPanelLocationViewModel> GetLocationsFromCache()
     {
         var cacheOptions = new MemoryCacheEntryOptions()
-                .SetSlidingExpiration(TimeSpan.FromMinutes(30));
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5));
         var locationsFromCache = _memoryCache.GetOrCreate(_listLocationsKey, entry =>
         {
             entry.SetOptions(cacheOptions);

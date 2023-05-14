@@ -58,6 +58,34 @@ function openModalChangePassword(parameters) {
 };
 
 
+function openModalAddComment(parameters) {
+    const url = parameters.url;
+
+    if (url === undefined) {
+        alert('Error')
+        return;
+    }
+    const cookieValue = document.cookie.match('UserCookie');
+    if (cookieValue === null || cookieValue === undefined) {
+        window.location.href = "../Account/Login";
+    }
+    else {
+        var link = url + '?locationId=' + parameters.locationId + '&login=' + parameters.login;
+        axios.get(link)
+            .then(function (response) {
+                modal.classList.remove("active");
+                const modalBody = modal.querySelector(".modal-body");
+                modalBody.innerHTML = response.data;
+                overlay.style.display = "block";
+                modal.classList.add("active");
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+};
+
+
 function updateDataOfTable(parameters) {
 
     axios.get(parameters.url)

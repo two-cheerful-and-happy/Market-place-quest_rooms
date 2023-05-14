@@ -1,0 +1,26 @@
+﻿@using Domain.Enums
+@model Domain.ViewModels.Comment.AddCommentViewModel
+@{
+}
+            <h2>Add comment</h2>
+            <form class="row g-3" asp-action="AddComment" asp-controller="Comment" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <input asp-for="LocationId" hidden>
+                <input asp-for="Name" hidden>
+                <div class="form-element">
+                    <label asp-for="Comment" class="form-label">Comment</label>
+                    <input asp-for="Comment" type="text" class="form-control" required>
+                </div>
+                <div class="form-element">
+                    <select asp-for="Mark" class="upper-btn-2">
+                        <option value="1">@Mark.Bad</option>
+                        <option value="2">@Mark.Low</option>
+                        <option value="3">@Mark.Medium</option>
+                        <option value="4">@Mark.Good</option>
+                        <option value="5">@Mark.Perfect</option>
+                    </select>
+                </div>
+                <div class="form-element">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>

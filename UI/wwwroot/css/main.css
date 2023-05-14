@@ -239,3 +239,14 @@ body {
     text-decoration: none;
     cursor: pointer;
 }
+.wrapper a {
+    text-decoration: none;
+}
+
+a header {
+    cursor: default;
+}
+
+span {
+    font-size: 20px;
+}

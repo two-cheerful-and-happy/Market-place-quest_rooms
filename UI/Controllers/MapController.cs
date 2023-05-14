@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using Domain.ViewModels.Map;
+using System.Net.WebSockets;
 
 namespace UI.Controllers;
 
@@ -20,46 +21,30 @@ public class MapController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetLocations()
+    public IActionResult GetLocations()
     {
-        var response = await  _mapService.GetLocationsAsync();
+        var response =  _mapService.GetLocations();
 
         return Json(response);
-    }
-
-    [HttpGet]
-    public async Task<IActionResult> Add()
-    {
-        var user = await _accountService.GetAccountByLoginAsync("Goose");
-        var a = new Location()
-        {
-            Address = "s",
-            Author = user.Data,
-            Name = "s",
-            
-            Latitude = 48.837930,
-            Longitude = 27.107993
-        };
-        
-        return View();
-    }
-
-    public IActionResult GetMyObjects()
-    {
-        var myObjects = new List<Account>
-    {
-        new Account { Id = 1, Email = "Object 1" },
-        new Account { Id = 2, Email = "Object 2" },
-        new Account { Id = 3, Email = "Object 3" }
-    };
-
-        return Json(myObjects);
     }
 
     [HttpGet]
     public IActionResult Search()
     {
         return PartialView("SearchModal");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> LocationView(string name)
+    {
+        if (name == null)
+            return PartialView("PopupWindow", "Error");
+        var response = await _mapService.GetLocationOverviewAsync(name);
+        if(response.StatusCode == System.Net.HttpStatusCode.OK)
+        {
+            return View(response.Data);
+        }
+        return PartialView("PopupWindow", "Error");
     }
 
     [HttpPost]

@@ -17,5 +17,6 @@ public static class Initializer
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IMapService, MapService>();
         services.AddScoped<IAdminPanelService, AdminPanelService>();
+        services.AddScoped<ICommentService, CommentService>();
     }
 }

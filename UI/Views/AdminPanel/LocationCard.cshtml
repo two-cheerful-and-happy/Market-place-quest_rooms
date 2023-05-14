@@ -19,16 +19,6 @@
                        readonly />
             </div>
         </div>
-        <div class="photo-container">
-            @*<div class="photo-content">
-                <label class="photo-label">
-                    <span class="photo-span">Add Photo</span>
-                    <input type="file" asp-for="Photo"
-                           accept=".png,.jpg,.JPG" name="Photo" required />
-                </label>
-                <span class="text-danger" asp-validation-for="Photo" data-valmsg-replace="true"></span>
-            </div>*@
-        </div>
         <div class="input-group">
             <textarea rows="4"
                       id="description"
@@ -55,3 +45,36 @@
         }
     </form>
 </div>
+@*    <form asp-action="ConfirmLocation" asp-controller="AdminPanel" method="post">
+    <div class="card">
+        <div class="card__head">
+            <div class="card__product-img">
+                <img src="./../img/room.webp" alt="room" />
+            </div>
+        </div>
+
+        <div class="card__body">
+
+            <a href="#">
+                <h3 class="card__title">@Model.Name</h3>
+            </a>
+
+            <p class="card__text">
+                @Model.Description
+            </p>
+        </div>
+
+        <div class="card__footer">
+            <img src="./../img/owner-logo.png" alt="" class="card__author-img" />
+            <p class="card__author-name">Creating of <a href="#"> @Model.AuthorName</a></p>
+            <button class="add-testimonial"><a href="#">Add Testimonial</a></button>
+        </div>
+        @if (!Model.LocationConfirmed)
+        {
+            <div class="input-group">
+                <button>Submit</button>
+            </div>
+        }
+    </div>
+</form>
+*@

@@ -83,7 +83,7 @@ public class ApplicationDbContext : DbContext
 
             buildAction
                 .HasMany(x => x.CommentsCreatedByAccount)
-                .WithMany(x => x.CommentsOfAccount);
+                .WithOne(x => x.Account);
 
             buildAction
                 .HasData(new Account
@@ -150,7 +150,9 @@ public class ApplicationDbContext : DbContext
 
             buildAction
                 .HasMany(x => x.CommentsOfLocation)
-                .WithMany(x => x.CommentsOfLocation);
+                .WithOne(x => x.Location)
+                .OnDelete(DeleteBehavior.Restrict);
+
         });
 
         modelBuilder.Entity<Comment>(buildAction =>

@@ -109,7 +109,7 @@ input, textarea {
     border: 2px solid var(--blue-yonder);
 }
 
-button {
+.add-location {
     padding: 10px;
     color: var(--aqua);
     outline: none;
