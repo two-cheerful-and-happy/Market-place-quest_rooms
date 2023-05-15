@@ -1,0 +1,80 @@
+﻿@using Domain.Enums
+@model Domain.ViewModels.AdminPanel.AdminPanelLocationViewModel
+
+<div class="location-container">
+    <form asp-action="ConfirmLocation" asp-controller="AdminPanel" method="post">
+        <div class="row">
+            <div class="input-group">
+                <input type="text"
+                       id="name"
+                       placeholder="Enter location's name"
+                       asp-for="Name"
+                       readonly />
+            </div>
+            <div class="input-group">
+                <input type="text"
+                       id="address"
+                       placeholder="Enter location's address"
+                       asp-for="Address"
+                       readonly />
+            </div>
+        </div>
+        <div class="input-group">
+            <textarea rows="4"
+                      id="description"
+                      placeholder="Enter description"
+                      asp-for="Description"
+                      readonly></textarea>
+        </div>
+        <div class="row-map">
+            <div class="input-group map" id="map">
+            </div>
+            <div class="map-item">
+                <input asp-for="Latitude" readonly>
+                <input asp-for="Longitude" readonly>
+            </div>
+        </div>
+        <div class="input-group">
+            <button type="button" onclick="closeModal()">Cancel</button>
+        </div>
+        @if (!Model.LocationConfirmed)
+        {
+            <div class="input-group">
+                <button>Submit</button>
+            </div>
+        }
+    </form>
+</div>
+@*    <form asp-action="ConfirmLocation" asp-controller="AdminPanel" method="post">
+    <div class="card">
+        <div class="card__head">
+            <div class="card__product-img">
+                <img src="./../img/room.webp" alt="room" />
+            </div>
+        </div>
+
+        <div class="card__body">
+
+            <a href="#">
+                <h3 class="card__title">@Model.Name</h3>
+            </a>
+
+            <p class="card__text">
+                @Model.Description
+            </p>
+        </div>
+
+        <div class="card__footer">
+            <img src="./../img/owner-logo.png" alt="" class="card__author-img" />
+            <p class="card__author-name">Creating of <a href="#"> @Model.AuthorName</a></p>
+            <button class="add-testimonial"><a href="#">Add Testimonial</a></button>
+        </div>
+        @if (!Model.LocationConfirmed)
+        {
+            <div class="input-group">
+                <button>Submit</button>
+            </div>
+        }
+    </div>
+</form>
+*@

@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.Interfaces;
 using Domain.ViewModels.Map;
+using System.Net.WebSockets;
 
 namespace UI.Controllers;
 
@@ -20,57 +21,43 @@ public class MapController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetLocations()
+    public IActionResult GetLocations()
     {
-        var response = await  _mapService.GetLocationsAsync();
+        var response =  _mapService.GetLocations();
 
         return Json(response);
     }
-
+    
     [HttpGet]
-    public async Task<IActionResult> Add()
+    public async Task<IActionResult> LocationView(string name)
     {
-        var user = await _accountService.GetAccountByLoginAsync("Goose");
-        var a = new Location()
+        if (name == null)
+            return PartialView("PopupWindow", "Error");
+        var response = await _mapService.GetLocationOverviewAsync(name);
+        if(response.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            Address = "s",
-            Author = user.Data,
-            Name = "s",
-            
-            Latitude = 48.837930,
-            Longitude = 27.107993
-        };
-        _mapService.AddNewLocationAsync(a);
-        return View();
-    }
-
-    public IActionResult GetMyObjects()
-    {
-        var myObjects = new List<Account>
-    {
-        new Account { Id = 1, Email = "Object 1" },
-        new Account { Id = 2, Email = "Object 2" },
-        new Account { Id = 3, Email = "Object 3" }
-    };
-
-        return Json(myObjects);
+            return View(response.Data);
+        }
+        return PartialView("PopupWindow", "Error");
     }
 
     [HttpGet]
-    public IActionResult Search()
-    {
-        return PartialView("SearchModal");
-    }
-
-    [HttpPost]
-    public IActionResult Search(SearchViewModel model)
+    public IActionResult Search(string name)
     {
         if (ModelState.IsValid)
         {
-            
-
-            return RedirectToAction("Index");
+            var locations = _mapService.GetLocations();
+            var location = locations.Where(x => x.Name == name).First();
+            if(location != null)
+            {
+                var result = new
+                {
+                    longitude = location.Longitude,
+                    latitude = location.Latitude
+                };
+                return Json(result);
+            }
         }
-        return RedirectToAction("Index");
+        return Json(null);
     }
 }

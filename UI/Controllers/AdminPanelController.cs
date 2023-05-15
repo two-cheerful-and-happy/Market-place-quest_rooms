@@ -10,15 +10,20 @@ namespace UI.Controllers;
 [Authorize(Roles = "Admin, Manager")]
 public class AdminPanelController : Controller
 {
-    private readonly IAccountService _accountService;
     private readonly IAdminPanelService _adminPanelService;
 
     public AdminPanelController(
-        IAccountService accountService, 
         IAdminPanelService adminPanelService)
     {
-        _accountService = accountService;
         _adminPanelService = adminPanelService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> LocationConfirmPanel(IsConfirmed? confirmed, string? name, string? author,int page = 1)
+    {
+        NewFilterOfLocationPanel newFilterOfAccount = new(confirmed.ToString(), name, author, page);
+        var response = await _adminPanelService.SetLocationPanelViewModel(newFilterOfAccount, false);
+        return View(response.Data);
     }
 
     [HttpGet]
@@ -38,6 +43,14 @@ public class AdminPanelController : Controller
     }
 
     [HttpGet]
+    public async Task<ActionResult> GetLocationCard(int id)
+    {
+        var response = await _adminPanelService.GetLoationFromCacheAsync(id);
+
+        return PartialView("LocationCard", response.Data);
+    }
+
+    [HttpGet]
     public async Task<ActionResult> GetDeleteUserCard(int id)
     {
         return PartialView("DeleteAccountCard", id);
@@ -51,10 +64,23 @@ public class AdminPanelController : Controller
         {
             var response = await _adminPanelService.ChangeUserRoleAsync(account, User.Identity.Name);
             if(response.StatusCode == System.Net.HttpStatusCode.OK)
-                return PartialView("SuccessPopupWindow", "Role was changed");
+                return PartialView("PopupWindow", "Role was changed");
             message = response.Description;
         }
-        return PartialView("ErrorPopupWindow", message);
+        return PartialView("PopupWindow", message);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ConfirmLocation(AdminPanelLocationViewModel model)
+    {
+        string message = string.Empty;
+        
+        var response = await _adminPanelService.ConfirmLocationAsync(model);
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            return PartialView("LocationPopupWindow", "Location was confirmed");
+        message = response.Description;
+        
+        return PartialView("LocationPopupWindow", message);
     }
 
     [HttpGet]
@@ -73,11 +99,20 @@ public class AdminPanelController : Controller
         return PartialView();
     }
 
+
     [HttpGet]
     public async Task<IActionResult> UpdatePanelData()
     {
         NewFilterOfAccountPanel newFilterOfAccount = new(null, null, 1);
-        var response = await _adminPanelService.SetPanelViewModel(newFilterOfAccount, true);
-        return View("Panel");
+        var result = await _adminPanelService.SetPanelViewModel(newFilterOfAccount, true);        
+        return View("Panel", result.Data);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> UpdateLocationData()
+    {
+        NewFilterOfLocationPanel newFilterOfLocation = new(null,null, null, 1);
+        var result =  await _adminPanelService.SetLocationPanelViewModel(newFilterOfLocation, true);
+        return View("LocationConfirmPanel", result.Data);
     }
 }

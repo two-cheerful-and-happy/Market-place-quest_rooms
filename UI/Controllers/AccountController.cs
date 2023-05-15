@@ -61,7 +61,7 @@ public class AccountController : Controller
                 Response.Cookies.Delete("UserCookie");
                 Response.Cookies.Append("UserCookie", jsonCookie);
                 return PartialView(
-                    "SuccessPopupWindow",
+                    "PopupWindow",
                     $"Login was changed.");
 
             }
@@ -141,7 +141,7 @@ public class AccountController : Controller
             var response = await _accountService.ChangePasswordAsync(model);
             if(response.StatusCode == HttpStatusCode.OK)
                 return PartialView(
-                    "SuccessPopupWindow",
+                    "PopupWindow",
                     $"Password was changed.");
             error.PasswordError = response.Data.ErrorMessage;
         }
@@ -171,7 +171,7 @@ public class AccountController : Controller
                 await _mailService.SendEmailAsync(model.Email, "Confirm email", mail);
 
                 return PartialView(
-                "SuccessPopupWindow",
+                "PopupWindow",
                 $"Check your account: {model.Email} to confirm email.");
             }
             
@@ -210,7 +210,7 @@ public class AccountController : Controller
 
             await _mailService.SendEmailAsync(model.Email, "Confirm email", mail);
             return PartialView(
-                "SuccessPopupWindow",
+                "PopupWindow",
                 $"Check your account: {model.Email} to change password.");
         }
         return PartialView(model);

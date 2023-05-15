@@ -15,7 +15,6 @@ public class ApplicationDbContext : DbContext
 
     public DbSet<Location> LocationTable { get; set; }
     public DbSet<Account> AccountTable { get; set; }
-    public DbSet<Photo> PhotoTable { get; set; }
     public DbSet<Comment> CommentTable { get; set; }
     
 
@@ -84,7 +83,7 @@ public class ApplicationDbContext : DbContext
 
             buildAction
                 .HasMany(x => x.CommentsCreatedByAccount)
-                .WithMany(x => x.CommentsOfAccount);
+                .WithOne(x => x.Account);
 
             buildAction
                 .HasData(new Account
@@ -112,7 +111,7 @@ public class ApplicationDbContext : DbContext
 
             buildAction
                 .Property(x => x.Name)
-                .HasColumnType("CHAR(50)")
+                .HasColumnType("VARCHAR(50)")
                 .HasColumnName("Name")
                 .IsRequired();
 
@@ -134,6 +133,12 @@ public class ApplicationDbContext : DbContext
                 .HasColumnType("BIT");
 
             buildAction
+                .Property(x => x.Photo)
+                .HasColumnType("VARBINARY(MAX)")
+                .HasColumnName("Photo")
+                .IsRequired();
+
+            buildAction
                 .Property(x => x.Latitude)
                 .HasColumnType("float")
                 .HasColumnName("Latitude");
@@ -145,7 +150,9 @@ public class ApplicationDbContext : DbContext
 
             buildAction
                 .HasMany(x => x.CommentsOfLocation)
-                .WithMany(x => x.CommentsOfLocation);
+                .WithOne(x => x.Location)
+                .OnDelete(DeleteBehavior.Restrict);
+
         });
 
         modelBuilder.Entity<Comment>(buildAction =>
@@ -169,24 +176,6 @@ public class ApplicationDbContext : DbContext
                 .HasColumnName("Mark");
         });
 
-        modelBuilder.Entity<Photo>(buildAction =>
-        {
-            buildAction.
-                ToTable("Photo_Table");
-
-            buildAction
-                .HasKey(x => x.Id)
-                .HasName("Index_of_Location_of_user");
-
-            buildAction
-                .Property(x => x.Value)
-                .HasColumnType("VARBINARY(MAX)")
-                .HasColumnName("Value")
-                .IsRequired();
-
-            buildAction
-                .HasOne(x => x.LocationId)
-                .WithMany(x => x.Photos);
-        });
+        
     }
 }

@@ -3,3 +3,83 @@
     ViewBag.currentPath = "AdminPanel/Panel";
 
 }
+<div class="container">
+    <section class="main">
+        <div class="upper-table">
+            <form method="get">
+                <input class="upper-btn-1" placeholder="Name" name="name">
+                <input class="upper-btn-1" placeholder="Author" name="author">
+                <select class="upper-btn-2" asp-items="@Model.FilterLocationPanelViewModel.ConfirmedChoose" name="confirmed"></select>
+                <div class="sub-btn">
+                    <button type="submit" class="sub-btn-1">Filter</button>
+                </div>
+            </form>
+        </div>
+        <section class="attendance">
+            <div class="attendance-list">
+                <h1>Admin Panel</h1>
+                <button class="data einzug-2" onclick="updateDataOfTable({ url: '@Url.Action("UpdateLocationData", "AdminPanel")'})">Update Data</button>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Author</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (Model.Locations.Count() > 0)
+                            {
+                                foreach (var Data in Model.Locations)
+                                {
+                                    <tr class="not-active">
+                                        <td>@Data.Id</td>
+                                        <td>@Data.Name</td>
+                                        <td>@Data.AuthorName</td>
+                                        <td>
+                                            <button type="submit" onclick="openModalForm({ url: '@Url.Action("GetLocationCard", "AdminPanel")', data: @Data.Id })">
+                                                Show
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr class="not-active">
+                                    <td style="text-align:center" colspan="4">List is empty.</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (Model.PageViewModel.HasPreviousPage || Model.PageViewModel.HasNextPage)
+            {
+                <div class="under-table">
+                    @if (Model.PageViewModel.HasPreviousPage)
+                    {
+                        <a class="under-btn-1"
+                   asp-action="Panel"
+                   asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+                   role="button">
+                            Back
+                        </a>
+                    }
+                    @if (Model.PageViewModel.HasNextPage)
+                    {
+                        <a class="under-btn-2"
+                   asp-action="Panel"
+                   asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+                   role="button">
+                            Next
+                        </a>
+                    }
+                </div>
+            }
+        </section>
+    </section>
+</div>
+

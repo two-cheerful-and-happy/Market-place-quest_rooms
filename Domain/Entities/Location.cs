@@ -9,7 +9,7 @@ public class Location
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public bool LocationConfirmed { get; set; }
+    public byte[] Photo { get; set; }
     public Account Author { get; set; }
-    public ICollection<Photo> Photos { get; set; }
     public ICollection<Comment> CommentsOfLocation { get; set; }
 }

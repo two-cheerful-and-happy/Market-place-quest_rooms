@@ -1,12 +1,14 @@
-﻿using Domain.ViewModels.OwnerOfRoom;
+﻿using Domain.ViewModels.Map;
+using Domain.ViewModels.OwnerOfRoom;
 
 namespace BusinessLogic.Interfaces;
 
 public interface IMapService
 {
-    Task<List<Location>> GetLocationsAsync();
+    List<Location> GetLocations();
     
-    Task<BaseResponse<Location>> AddNewLocationAsync(Location location);
+    Task<BaseResponse<ValidationResult>> AddNewLocationAsync(AddNewLocationViewModel model);
 
-    Location CreateNewLocato(AddNewLocationViewModel location);
+    Task<BaseResponse<OverviewLocationViewModel>> GetLocationOverviewAsync(string name);
+
 }

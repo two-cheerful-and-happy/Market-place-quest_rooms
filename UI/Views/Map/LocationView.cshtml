@@ -1,0 +1,79 @@
+﻿@model Domain.ViewModels.Map.OverviewLocationViewModel
+@using Domain.DTO
+@using Newtonsoft.Json
+@{
+    ViewBag.currentPath = "Map/LocationView";
+    AccountCookieData userCookie = new();
+    if (User.Identity.IsAuthenticated)
+    {
+        var userCookieJson = Context.Request.Cookies["UserCookie"];
+        userCookie = JsonConvert.DeserializeObject<AccountCookieData>(userCookieJson);
+    }
+}
+<div class="card">
+    <div class="card__head">
+        <div class="card__product-img">
+            <img src="data:image/png;base64, @Convert.ToBase64String(Model.Photo)" alt="room" />
+        </div>
+    </div>
+
+    <div class="card__body">
+
+        <a href="#">
+            <h3 class="card__title">@Model.Name</h3>
+        </a>
+
+        <p class="card__text">
+            @Model.Description
+        </p>
+
+        <section class="testimonials">
+            <h3 class="h3 testimonials-title">Testimonials</h3>
+            <div class="wrapper">
+                <div class="card__view">
+                    <span>Mark: @Model.Mark</span>
+                </div>
+            </div>
+            @if(Model.Comments is null)
+            {
+                <h4 class="h4 testimonials-item-title"> No comments</h4>
+            }
+            else
+            {
+                foreach (var item in Model.Comments)
+                {
+                    string avatar = string.Empty;
+                    if (item.Account.Role == Domain.Enums.Role.Admin || item.Account.Role == Domain.Enums.Role.Manager)
+                        avatar = "admin-logo.png";
+                    else if (item.Account.Role == Domain.Enums.Role.OwnerOfRooms)
+                        avatar = "owner-logo.png";
+                    else if (item.Account.Role == Domain.Enums.Role.User)
+                        avatar = "users-logo.png";
+                        
+                    <ul class="testimonials-list has-scrollbar">
+                        <li class="testimonials-item">
+                            <div class="content-card">
+                                <figure class="testimonials-avatar-box">
+                                    <img src="~/img/@avatar" alt="Daniel lewis">
+                                </figure>
+                                <h4 class="h4 testimonials-item-title">@item.Account.Login</h4>
+                                <div class="testimonials-text">
+                                    <p>
+                                        @item.Text
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>    
+                }
+            }
+        </section>
+        
+    </div>
+
+    <div class="card__footer">
+        <img src="./../img/owner-logo.png" alt="" class="card__author-img" />
+        <p class="card__author-name">Creating of <a href="#"> Somebody</a></p>
+        <button class="add-testimonial" onclick="openModalAddComment({ url: '@Url.Action("AddComment", "Comment")', locationId: '@Model.Id', login: '@userCookie.Login'})">Add Testimonial</button>
+    </div>
+</div>

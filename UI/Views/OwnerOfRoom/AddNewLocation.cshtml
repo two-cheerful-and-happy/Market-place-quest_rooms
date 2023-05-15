@@ -1,3 +1,61 @@
-﻿@{
+﻿@model Domain.ViewModels.OwnerOfRoom.AddNewLocationViewModel
+@{
+    ViewBag.currentPath = "Owner/AddLocation";
 }
 
+<div class="location-container">
+    <form asp-action="CreateLocation" asp-controller="OwnerOfRoom" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="input-group">
+                <input type="text"
+                       id="name"
+                       placeholder="Enter location's name"
+                       asp-for="Name"
+                       required />
+                <span class="text-danger" asp-validation-for="Name" data-valmsg-replace="true"></span>
+            </div>
+            <div class="input-group">
+                <input type="text"
+                       id="address"
+                       placeholder="Enter location's address"
+                       asp-for="Address"
+                       required />
+                <span class="text-danger" asp-validation-for="Address" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="photo-container">
+            <div class="photo-content">
+                <label class="photo-label">
+                    <span class="photo-span">Add Photo</span>
+                    <input type="file" asp-for="Photo"
+                           accept=".png,.jpg,.JPG" name="Photo" required/>
+                </label>
+                <span class="text-danger" asp-validation-for="Photo" data-valmsg-replace="true"></span>
+            </div>
+        </div>
+        <div class="input-group">
+            <textarea rows="4"
+                      id="description"
+                      placeholder="Enter description"
+                      asp-for="Description"
+                      required></textarea>
+            <span class="text-danger" asp-validation-for="Description" data-valmsg-replace="true"></span>
+        </div>
+        <div class="row-map">
+            <div class="input-group map" id="map">
+            </div>
+            <div class="map-item">
+                <input asp-for="Latitude" readonly>
+                <span class="text-danger" asp-validation-for="Latitude" data-valmsg-replace="true"></span>
+                <input asp-for="Longitude" readonly>
+                <span class="text-danger" asp-validation-for="Longitude" data-valmsg-replace="true"></span>
+                
+                
+                <button type="button" class="add-location" onclick="reloadMap()">Reload</button>
+            </div>
+        </div>
+        <div class="input-group">
+            <button class="add-location">Submit</button>
+        </div>
+    </form>
+</div>

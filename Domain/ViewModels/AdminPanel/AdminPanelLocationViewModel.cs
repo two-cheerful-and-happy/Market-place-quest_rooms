@@ -9,6 +9,7 @@ public class AdminPanelLocationViewModel
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public string AuthorName { get; set; }
+    public byte[] Photo { get; set; }
     public int AuthorId { get; set; }
     public bool LocationConfirmed { get; set; }
 }
