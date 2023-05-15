@@ -111,7 +111,7 @@ public class ApplicationDbContext : DbContext
 
             buildAction
                 .Property(x => x.Name)
-                .HasColumnType("CHAR(50)")
+                .HasColumnType("VARCHAR(50)")
                 .HasColumnName("Name")
                 .IsRequired();
 

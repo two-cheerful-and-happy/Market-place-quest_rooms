@@ -1,16 +1,32 @@
 ﻿let map;
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: -34.397, lng: 150.644 },
-        zoom: 8,
-    });
+
+    var longitude = localStorage.getItem("Longitude");
+    var latitude = localStorage.getItem("Latitude");
+
+    if (longitude === null && latitude === null) {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: -34.397, lng: 150.644 },
+            zoom: 8,
+        });
+    }
+    else {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: Number(latitude), lng: Number(longitude) },
+            zoom: 12,
+        });
+        localStorage.removeItem("Latitude");
+        localStorage.removeItem("Longitude");
+    }
+
+    
 
     
     axios.get('/Map/GetLocations')
         .then(function (response) {
             for (var i = 0; i < response.data.length; i++) {
-                createMarker(response.data[i]);
+                 createMarker(response.data[i]);
             }
         })
         .catch(function (error) {
@@ -39,6 +55,14 @@ function initMap() {
         });
     }
 }
+
+function moveToLabel(response) {
+    if (response.data !== null && response.data !== undefined) {
+        map.setCenter({ lat: response.data.latitude, lng: response.data.longitude });
+        map.setZoom(12);
+    }
+}
+
 
 window.initMap = initMap;
 

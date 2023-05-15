@@ -191,12 +191,11 @@
     <div class="search-container" data-search-box >
 
         <div class="input-wrapper">
-
-            <input type="search" name="search" aria-label="search" placeholder="Search here..." class="search-field">
-            <button class="search-submit" aria-label="submit search" data-search-toggler>
+            
+            <input type="search" id="searchInput" name="search" aria-label="search" placeholder="Search here..." class="search-field">
+            <button class="search-submit" onclick="searchLocation()" aria-label="submit search" data-search-toggler>
                 <ion-icon name="search-outline"></ion-icon>
             </button>
-
 
             <button class="search-close" aria-label="close search" data-search-toggler></button>
         </div>
@@ -227,6 +226,8 @@
 
     </footer>
     
+    
+
     @if (ViewBag.currentPath == "Map/Index")
     {
         <script src="~/js/map.js"></script>
@@ -237,5 +238,6 @@
         <script src="~/js/map-add-location.js"></script>
         <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC46HqGIWfYeMj59WLvcHXjuGLXgOX3fr0&callback=initMap&v=weekly"></script>
     }
+    <script src="~/js/search.js"></script>
 </body>
 </html>

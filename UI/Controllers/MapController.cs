@@ -27,13 +27,7 @@ public class MapController : Controller
 
         return Json(response);
     }
-
-    [HttpGet]
-    public IActionResult Search()
-    {
-        return PartialView("SearchModal");
-    }
-
+    
     [HttpGet]
     public async Task<IActionResult> LocationView(string name)
     {
@@ -47,15 +41,23 @@ public class MapController : Controller
         return PartialView("PopupWindow", "Error");
     }
 
-    [HttpPost]
-    public IActionResult Search(SearchViewModel model)
+    [HttpGet]
+    public IActionResult Search(string name)
     {
         if (ModelState.IsValid)
         {
-            
-
-            return RedirectToAction("Index");
+            var locations = _mapService.GetLocations();
+            var location = locations.Where(x => x.Name == name).First();
+            if(location != null)
+            {
+                var result = new
+                {
+                    longitude = location.Longitude,
+                    latitude = location.Latitude
+                };
+                return Json(result);
+            }
         }
-        return RedirectToAction("Index");
+        return Json(null);
     }
 }
