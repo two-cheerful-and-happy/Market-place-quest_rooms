@@ -70,6 +70,9 @@
         case "Owner/AddLocation":
             <link rel="stylesheet" href="~/css/addlocation.css">
             break;
+        case "Owner/LocationOfOwner":
+            <link rel="stylesheet" href="~/css/locationofowner.css">
+            break;
         default:
             break;
     }
@@ -128,7 +131,7 @@
                     <ul class="sub-menu">
                         <li><a class="link_name">Owner Of Quest Room</a></li>
                         <li><a asp-action="AddNewLocation" asp-controller="OwnerOfRoom">Created New Location</a></li>
-                        <li><a href="#">Location Of Owner</a></li>
+                        <li><a asp-action="LocationOfUser" asp-controller="OwnerOfRoom">Location Of Owner</a></li>
                     </ul>
                 </li>
             }

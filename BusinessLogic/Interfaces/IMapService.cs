@@ -6,9 +6,8 @@ namespace BusinessLogic.Interfaces;
 public interface IMapService
 {
     List<Location> GetLocations();
-    
     Task<BaseResponse<ValidationResult>> AddNewLocationAsync(AddNewLocationViewModel model);
-
     Task<BaseResponse<OverviewLocationViewModel>> GetLocationOverviewAsync(string name);
+    Task<BaseResponse<List<LocationOfUserVIewModel>>> GetLocationsOfUserAsync(string userLogin);
 
 }

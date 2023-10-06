@@ -16,6 +16,17 @@ public class OwnerOfRoomController : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> LocationOfUser()
+    {
+        AccountCookieData userCookie = new();
+        var userCookieJson = Request.Cookies["UserCookie"];
+        userCookie = JsonConvert.DeserializeObject<AccountCookieData>(userCookieJson);
+        
+        var response = await _mapService.GetLocationsOfUserAsync(userCookie.Login);
+        return View(response.Data);
+    }
+
+    [HttpGet]
     public IActionResult AddNewLocation()
     {
         return View();

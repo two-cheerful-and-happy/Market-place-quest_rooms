@@ -1,0 +1,52 @@
+﻿@model List<Domain.ViewModels.OwnerOfRoom.LocationOfUserVIewModel>
+@{
+    ViewBag.currentPath = "Owner/LocationOfOwner";
+}
+<article>
+    <section class="section discover" aria-labelledby="discover-label">
+        <div class="container">
+            <h2 class="headline-md section-title text-center" id="discover-label">Location of Owner</h2>
+        @if(Model.Count > 0)
+        {
+            foreach(var item in Model)
+            {
+                <ul class="grid-list">
+                    <li>
+                        <div class="discover-card card">
+                            <div class="card-banner img-holder" style="--width: 500; --height: 500;">
+                                <img src="data:image/png;base64, @Convert.ToBase64String(item.Photo)" width="500" height="500" loading="lazy"
+                                 alt="Genuine Undead #3902" class="img-cover">
+                                <button class="btn btn-primary">
+                                    <ion-icon name="flash" aria-hidden="true"></ion-icon>
+                                    <span class="span">View</span>
+                                </button>
+                            </div>
+                            <h3 class="title-sm card-title">
+                                <a href="../Map/LocationView?name=@item.Name" class="link:hover">@item.Name</a>
+                            </h3>
+                            <div class="card-meta">
+                                <div>   
+                                    <p>Rate</p>
+                                    <div class="card-price">
+                                        <img src="./../img/star-half-outline.svg" width="16" height="24" loading="lazy" alt="ethereum icon">
+                                        <span class="span">@item.Mark</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            }
+            
+        }
+        else
+        {
+
+        }
+            
+                
+                
+            
+        </div>
+    </section>
+</article>

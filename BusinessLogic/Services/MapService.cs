@@ -1,9 +1,12 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
+using Domain.Entities;
+using Domain.Enums;
 using Domain.ViewModels.AdminPanel;
 using Domain.ViewModels.Map;
 using Domain.ViewModels.OwnerOfRoom;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
@@ -145,57 +148,6 @@ public class MapService : IMapService
                     Description = "Location did not find",
                     StatusCode = HttpStatusCode.BadGateway
                 };
-            if(comments.Count != 0)
-            {
-                int mark = 0;
-
-                foreach (var item in comments)
-                {
-                    switch (item.Mark)
-                    {
-                        case Domain.Enums.Mark.Bad:
-                            mark += 1;
-                            break;
-                        case Domain.Enums.Mark.Low:
-                            mark += 2;
-                            break;
-                        case Domain.Enums.Mark.Medium:
-                            mark += 3;
-                            break;
-                        case Domain.Enums.Mark.Good:
-                            mark += 4;
-                            break;
-                        case Domain.Enums.Mark.Perfect:
-                            mark += 5;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                mark /= comments.Count;
-                switch (mark)
-                {
-                    case 0:
-                        result.Mark = Domain.Enums.Mark.Bad;
-                        break;
-                    case 1:
-                        result.Mark = Domain.Enums.Mark.Bad;
-                        break;
-                    case 2:
-                        result.Mark = Domain.Enums.Mark.Low;
-                        break;
-                    case 3:
-                        result.Mark = Domain.Enums.Mark.Medium;
-                        break;
-                    case 4:
-                        result.Mark = Domain.Enums.Mark.Good;
-                        break;
-                    case 5:
-                        result.Mark = Domain.Enums.Mark.Perfect;
-                        break;
-                }
-            }
-            
 
             result.AuthorName = location.Author.Login;
             result.Address = location.Address;
@@ -204,7 +156,7 @@ public class MapService : IMapService
             result.Description = location.Name;
             result.Comments = comments;
             result.Id = location.Id;
-
+            result.Mark = await SetMark(location.Id);
 
             return new BaseResponse<OverviewLocationViewModel>
             {
@@ -217,5 +169,97 @@ public class MapService : IMapService
 
             throw;
         }
+    }
+
+    public async Task<BaseResponse<List<LocationOfUserVIewModel>>> GetLocationsOfUserAsync(string userLogin)
+    {
+        try
+        {
+            var locations = await _locationRepositor.Select().Where(x => x.Author.Login == userLogin).Include(x => x.Author).ToListAsync();
+            var result = new List<LocationOfUserVIewModel>();
+            if (locations.Count > 1)
+            {
+                foreach (var location in locations)
+                {
+                    var item = new LocationOfUserVIewModel
+                    {
+                        AuthorName = location.Author.Login,
+                        Name = location.Name,
+                        Id = location.Id,
+                        Photo = location.Photo,
+                        Mark = await SetMark(location.Id)
+                    };
+                    result.Add(item);
+                }
+                
+            }
+            return new BaseResponse<List<LocationOfUserVIewModel>>
+            {
+                Data = result,
+                StatusCode = HttpStatusCode.OK
+            };
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+
+    private async Task<Mark> SetMark(int id)
+    {
+        var comments = await _commentRepositor.Select().Where(x => x.Location.Id == id).Include(x => x.Account).ToListAsync();
+        Mark result = 0;
+        if (comments.Count != 0)
+        {
+            int mark = 0;
+            
+            foreach (var item in comments)
+            {
+                switch (item.Mark)
+                {
+                    case Domain.Enums.Mark.Bad:
+                        mark += 1;
+                        break;
+                    case Domain.Enums.Mark.Low:
+                        mark += 2;
+                        break;
+                    case Domain.Enums.Mark.Medium:
+                        mark += 3;
+                        break;
+                    case Domain.Enums.Mark.Good:
+                        mark += 4;
+                        break;
+                    case Domain.Enums.Mark.Perfect:
+                        mark += 5;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            mark /= comments.Count;
+            switch (mark)
+            {
+                case 0:
+                    result = Domain.Enums.Mark.Bad;
+                    break;
+                case 1:
+                    result = Domain.Enums.Mark.Bad;
+                    break;
+                case 2:
+                    result = Domain.Enums.Mark.Low;
+                    break;
+                case 3:
+                    result = Domain.Enums.Mark.Medium;
+                    break;
+                case 4:
+                    result = Domain.Enums.Mark.Good;
+                    break;
+                case 5:
+                    result = Domain.Enums.Mark.Perfect;
+                    break;
+            }
+        }
+        return result;
     }
 }
